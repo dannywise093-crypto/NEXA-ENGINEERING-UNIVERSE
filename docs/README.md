@@ -1,3 +1,3 @@
-# AI Engineering Research Notes
+# NEXA Engineering Universe Docs
 
-This directory is reserved for architecture documents, research overviews, and long-form system design notes.
+Research notes and architecture guidance for multi-domain AI engineering experimentation.
