@@ -1,58 +1,135 @@
-      <section class="section alt" id="sources">
-        <div class="container">
-          <div class="section-heading">
-            <span class="eyebrow dark">RESEARCH SOURCES</span>
-            <h2>Ground the platform in literature, engineering insight, and open scholarship.</h2>
-          </div>
-
-          <div class="sources-grid">
-            <article class="source-card">
-              <a href="https://arxiv.org/" target="_blank" rel="noreferrer" class="source-link">
-                <div class="source-badge">arXiv</div>
-                <h3>AI and systems research</h3>
-                <p>Open-access preprints for machine learning, optimization, multi-agent systems, and applied AI research.</p>
-              </a>
-            </article>
-
-            <article class="source-card">
-              <a href="https://www.semanticscholar.org/" target="_blank" rel="noreferrer" class="source-link">
-                <div class="source-badge">Semantic Scholar</div>
-                <h3>Citation discovery</h3>
-                <p>Academic discovery and citation graph analysis to trace related work, influential papers, and research networks.</p>
-              </a>
-            </article>
-
-            <article class="source-card">
-              <a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noreferrer" class="source-link">
-                <div class="source-badge">PubMed</div>
-                <h3>Scientific literature</h3>
-                <p>Biomedical and life-science literature for evidence-based research and interdisciplinary discovery.</p>
-              </a>
-            </article>
-
-            <article class="source-card">
-              <a href="https://openalex.org/" target="_blank" rel="noreferrer" class="source-link">
-                <div class="source-badge">OpenAlex</div>
-                <h3>Open scholarly metadata</h3>
-                <p>Cross-discipline indexing for publication discovery, author mapping, and broad literature coverage.</p>
-              </a>
-            </article>
-
-            <article class="source-card">
-              <a href="https://ntrs.nasa.gov/" target="_blank" rel="noreferrer" class="source-link">
-                <div class="source-badge">NASA TRS</div>
-                <h3>Engineering and aerospace reports</h3>
-                <p>Technical reports and systems knowledge for engineering principles, aerospace research, and applied analysis.</p>
-              </a>
-            </article>
-
-            <article class="source-card">
-              <a href="https://www.crossref.org/" target="_blank" rel="noreferrer" class="source-link">
-                <div class="source-badge">Crossref</div>
-                <h3>Metadata and references</h3>
-                <p>Persistent identifier metadata for references, bibliographic structures, and scholarly interoperability.</p>
-              </a>
-            </article>
-          </div>
-        </div>
-      </section>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08111f">
+  <meta name="description" content="Search scholarly papers, engineering reports, and open research datasets across trusted research sources.">
+  <title>NEXA Engineering Universe — Research Portal</title>
+  <style>
+    :root{color-scheme:dark;--bg:#07101d;--panel:#0e1b2d;--panel2:#12233a;--line:#263b55;--text:#edf5ff;--muted:#a7b9cf;--cyan:#67d7ff;--green:#72f0c0}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#143453 0,transparent 38%),var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    a{color:var(--cyan)}.wrap{width:min(1160px,calc(100% - 32px));margin:auto}.topbar{padding:18px 0;border-bottom:1px solid var(--line);background:#07101dcc}.brand{font-weight:850;letter-spacing:.12em;font-size:.9rem}.brand span{color:var(--cyan)}header{padding:64px 0 42px}.eyebrow{color:var(--green);font-size:.76rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase}h1{font-size:clamp(2.2rem,6vw,4.6rem);line-height:1.04;letter-spacing:-.045em;max-width:850px;margin:14px 0 18px}header p{max-width:740px;color:var(--muted);font-size:1.08rem}.search-panel{margin:0 0 52px;padding:clamp(18px,4vw,32px);border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,#122740,#0b1728);box-shadow:0 20px 70px #0003}.search-panel h2{margin:0 0 6px;font-size:1.35rem}.search-panel p{color:var(--muted);margin:0 0 18px}.search-row{display:flex;gap:10px}.search-row input,.source-form input{min-width:0;width:100%;padding:14px 15px;border:1px solid #38516d;border-radius:12px;background:#071321;color:var(--text);font:inherit;outline:none}.search-row input:focus,.source-form input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #67d7ff22}button,.btn{border:0;border-radius:12px;background:var(--cyan);color:#061321;font:inherit;font-weight:800;padding:13px 18px;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;white-space:nowrap}button:hover,.btn:hover{filter:brightness(1.08)}.quick-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.quick-links a{font-size:.86rem;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--muted)}.section-title{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:20px}.section-title h2{margin:0;font-size:clamp(1.6rem,3vw,2.2rem)}.section-title p{color:var(--muted);margin:0}.sources-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:58px}.source-card{display:flex;flex-direction:column;padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(160deg,#102039,#0b1727);min-width:0;transition:transform .18s,border-color .18s}.source-card:hover{transform:translateY(-3px);border-color:#4b7799}.source-badge{align-self:flex-start;font-size:.72rem;font-weight:850;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:#67d7ff17;color:var(--cyan);margin-bottom:13px}.source-card h3{font-size:1.2rem;margin:0 0 8px}.source-card p{color:var(--muted);font-size:.94rem;margin:0 0 18px;flex:1}.source-form{display:flex;gap:8px;margin-top:auto}.source-form input{padding:11px 12px;font-size:.9rem}.source-form button{padding:10px 12px;font-size:.9rem}.source-open{display:inline-block;margin-top:12px;font-size:.88rem;text-decoration:none}.note{border:1px solid var(--line);border-radius:16px;padding:18px 20px;color:var(--muted);margin-bottom:50px}.note strong{color:var(--text)}footer{border-top:1px solid var(--line);padding:24px 0 36px;color:var(--muted);font-size:.88rem}footer a{text-decoration:none}
+    @media(max-width:850px){.sources-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.section-title{display:block}.section-title p{margin-top:8px}}
+    @media(max-width:580px){.wrap{width:min(100% - 24px,1160px)}header{padding:44px 0 30px}.sources-grid{grid-template-columns:1fr}.search-row{flex-direction:column}.search-row button{width:100%}.source-form input{flex:1;width:50%}.source-form button{padding-inline:12px}}
+  </style>
+</head>
+<body>
+  <div class="topbar"><div class="wrap brand"><span>NEXA</span> ENGINEERING UNIVERSE <span aria-hidden="true">/</span> RESEARCH PORTAL</div></div>
+  <header class="wrap">
+    <div class="eyebrow">Open knowledge · Engineering · AI · Science</div>
+    <h1>Find papers, technical reports, and research data.</h1>
+    <p>Search trusted scholarly and engineering sources directly from one place. Enter a topic once, then open the source you want to explore. Searches run on the providers' own websites; their results and access policies are controlled by each provider.</p>
+  </header>
+  <main class="wrap">
+    <section class="search-panel" aria-labelledby="all-search-title">
+      <h2 id="all-search-title">Start a research search</h2>
+      <p>Enter a topic, paper title, author, DOI, engineering problem, or dataset keyword.</p>
+      <form class="search-row" id="global-search">
+        <input id="global-query" type="search" placeholder="e.g. AI for renewable energy forecasting" aria-label="Research topic" required>
+        <button type="submit">Choose a source ↓</button>
+      </form>
+      <div class="quick-links" aria-label="Popular topics">
+        <a href="#" data-topic="artificial intelligence">Artificial intelligence</a>
+        <a href="#" data-topic="renewable energy systems">Renewable energy</a>
+        <a href="#" data-topic="aerospace engineering">Aerospace engineering</a>
+        <a href="#" data-topic="robotics">Robotics</a>
+        <a href="#" data-topic="climate data">Climate data</a>
+      </div>
+    </section>
+    <section id="sources" aria-labelledby="sources-title">
+      <div class="section-title"><div><div class="eyebrow">Research directory</div><h2 id="sources-title">Search by source</h2></div><p>Each search opens the provider's live search page.</p></div>
+      <div class="sources-grid">
+        <article class="source-card" data-source="arxiv">
+          <div class="source-badge">arXiv · AI & engineering</div><h3>AI and systems research</h3>
+          <p>Open-access preprints in machine learning, mathematics, physics, robotics, computer science, and engineering.</p>
+          <form class="source-form" data-base="https://arxiv.org/search/" data-param="query" data-extra="searchtype=all">
+            <input type="search" aria-label="Search arXiv" placeholder="Search papers…" required><button>Search ↗</button>
+          </form><a class="source-open" href="https://arxiv.org/" target="_blank" rel="noopener noreferrer">Browse arXiv home ↗</a>
+        </article>
+        <article class="source-card" data-source="semantic">
+          <div class="source-badge">Semantic Scholar</div><h3>Paper and citation discovery</h3>
+          <p>Find research papers, authors, related work, influential citations, and academic connections.</p>
+          <form class="source-form" data-base="https://www.semanticscholar.org/search" data-param="q">
+            <input type="search" aria-label="Search Semantic Scholar" placeholder="Search papers or authors…" required><button>Search ↗</button>
+          </form><a class="source-open" href="https://www.semanticscholar.org/" target="_blank" rel="noopener noreferrer">Browse Semantic Scholar ↗</a>
+        </article>
+        <article class="source-card" data-source="pubmed">
+          <div class="source-badge">PubMed · Biomedical</div><h3>Scientific and health literature</h3>
+          <p>Search biomedical, clinical, public-health, and life-science literature indexed by the National Library of Medicine.</p>
+          <form class="source-form" data-base="https://pubmed.ncbi.nlm.nih.gov/" data-param="term">
+            <input type="search" aria-label="Search PubMed" placeholder="Search biomedical research…" required><button>Search ↗</button>
+          </form><a class="source-open" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener noreferrer">Browse PubMed ↗</a>
+        </article>
+        <article class="source-card" data-source="openalex">
+          <div class="source-badge">OpenAlex · Open scholarship</div><h3>Open scholarly metadata</h3>
+          <p>Explore works, researchers, institutions, topics, and open scholarly metadata across disciplines.</p>
+          <form class="source-form" data-base="https://openalex.org/works" data-param="search">
+            <input type="search" aria-label="Search OpenAlex" placeholder="Search works or topics…" required><button>Search ↗</button>
+          </form><a class="source-open" href="https://openalex.org/" target="_blank" rel="noopener noreferrer">Browse OpenAlex ↗</a>
+        </article>
+        <article class="source-card" data-source="nasa">
+          <div class="source-badge">NASA TRS · Technical reports</div><h3>NASA Technical Reports Server</h3>
+          <p>Search aerospace research, NASA technical publications, mission reports, engineering, and space-science documents.</p>
+          <form class="source-form" data-base="https://ntrs.nasa.gov/search" data-param="q">
+            <input type="search" aria-label="Search NASA Technical Reports Server" placeholder="Search NASA reports…" required><button>Search ↗</button>
+          </form><a class="source-open" href="https://ntrs.nasa.gov/" target="_blank" rel="noopener noreferrer">Browse NASA TRS ↗</a>
+        </article>
+        <article class="source-card" data-source="crossref">
+          <div class="source-badge">Crossref · DOI metadata</div><h3>References and publications</h3>
+          <p>Find publications by title, author, DOI, journal, and bibliographic metadata for reference checking.</p>
+          <form class="source-form" data-base="https://search.crossref.org/" data-param="q">
+            <input type="search" aria-label="Search Crossref" placeholder="Search title, author, DOI…" required><button>Search ↗</button>
+          </form><a class="source-open" href="https://www.crossref.org/" target="_blank" rel="noopener noreferrer">Browse Crossref ↗</a>
+        </article>
+        <article class="source-card" data-source="datasets">
+          <div class="source-badge">Dataset discovery</div><h3>Google Dataset Search</h3>
+          <p>Discover published datasets from research repositories, universities, public agencies, and data providers.</p>
+          <form class="source-form" data-base="https://datasetsearch.research.google.com/" data-param="query">
+            <input type="search" aria-label="Search Google Dataset Search" placeholder="Search datasets…" required><button>Search ↗</button>
+          </form><a class="source-open" href="https://datasetsearch.research.google.com/" target="_blank" rel="noopener noreferrer">Browse dataset search ↗</a>
+        </article>
+      </div>
+    </section>
+    <aside class="note"><strong>Research note:</strong> NEXA links to external search services; it does not claim to host or independently verify their papers or datasets. Some full texts or datasets may require institutional access, a provider account, or acceptance of the provider's terms. Check publication dates, methods, and source quality before relying on findings.</aside>
+  </main>
+  <footer><div class="wrap">NEXA Engineering Universe · Research discovery portal · <a href="https://github.com/dannywise093-crypto/NEXA-ENGINEERING-UNIVERSE" target="_blank" rel="noopener noreferrer">View source on GitHub ↗</a></div></footer>
+  <script>
+    (() => {
+      const globalInput = document.getElementById('global-query');
+      const forms = [...document.querySelectorAll('.source-form')];
+      function searchUrl(form, query) {
+        const url = new URL(form.dataset.base);
+        url.searchParams.set(form.dataset.param || 'q', query.trim());
+        if (form.dataset.extra) new URLSearchParams(form.dataset.extra).forEach((value, key) => url.searchParams.set(key, value));
+        return url.toString();
+      }
+      forms.forEach(form => {
+        form.addEventListener('submit', event => {
+          event.preventDefault();
+          const input = form.querySelector('input');
+          const query = input.value.trim();
+          if (!query) { input.focus(); return; }
+          window.open(searchUrl(form, query), '_blank', 'noopener,noreferrer');
+        });
+      });
+      document.getElementById('global-search').addEventListener('submit', event => {
+        event.preventDefault();
+        const query = globalInput.value.trim();
+        if (!query) return;
+        forms.forEach(form => form.querySelector('input').value = query);
+        document.getElementById('sources-title').scrollIntoView({behavior:'smooth', block:'start'});
+        const firstInput = forms[0]?.querySelector('input');
+        if (firstInput) firstInput.focus({preventScroll:true});
+      });
+      document.querySelectorAll('[data-topic]').forEach(link => {
+        link.addEventListener('click', event => {
+          event.preventDefault();
+          globalInput.value = link.dataset.topic;
+          document.getElementById('global-search').requestSubmit();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
