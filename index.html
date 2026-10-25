@@ -19,6 +19,27 @@
     .ai-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.ai-actions small,.ai-status{color:var(--muted)}.ai-output{white-space:pre-wrap;overflow-wrap:anywhere;padding:16px;border:1px solid var(--line);border-radius:14px;background:#071321;min-height:60px}
     .paper-results{display:grid;gap:10px;margin-top:12px}.paper-result{padding:14px;border:1px solid var(--line);border-radius:12px;background:#0b1727}.paper-result h4{margin:0 0 5px;font-size:1rem}.paper-result p{margin:5px 0;color:var(--muted);font-size:.9rem}.paper-result a{overflow-wrap:anywhere}
 
+  
+    /* NEXA AI Chat interface refresh */
+    :root{color-scheme:dark;--bg:#030918;--panel:#07142b;--panel2:#0c1c3b;--line:#173b72;--text:#f4f8ff;--muted:#9ec9f1;--cyan:#4ccfff;--green:#72e7ff;--purple:#714bff}
+    body{background:radial-gradient(ellipse at 78% 12%,#14275b 0,transparent 38%),radial-gradient(ellipse at 52% 90%,#170d3e 0,transparent 35%),#030918;color:var(--text)}
+    .topbar{background:#050b1ddd;border-bottom-color:#14315e;position:sticky;top:0;z-index:5;padding:15px 0}
+    .brand{font-size:1rem;letter-spacing:.14em}.brand span:first-child{color:#5c9bff}
+    header{padding:42px 0 28px}h1{font-size:clamp(2.3rem,5vw,4rem);background:linear-gradient(90deg,#31d5ff,#7880ff,#c18bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .eyebrow{color:#5ddaff}.search-panel,.ai-panel,.source-card,.note{background:linear-gradient(145deg,#071733ee,#090f25ee);border-color:#17427d;box-shadow:0 18px 55px #0004}
+    .ai-panel{border-color:#1d58a5;background:linear-gradient(145deg,#071833,#080f25);padding:clamp(20px,4vw,40px);border-radius:24px}
+    .ai-panel h2{font-size:clamp(1.8rem,4vw,2.7rem);letter-spacing:-.035em}
+    .ai-panel>p{line-height:1.8}
+    .ai-chat textarea,.search-row input,.source-form input{background:#040c1c;border-color:#1d4b8b;border-radius:14px}
+    button,.btn{background:linear-gradient(110deg,#087cff,#6944ff);color:white;border:1px solid #408cff;box-shadow:0 5px 20px #164bff30}
+    .quick-links a{border-color:#24457b;color:#b9d8ff;background:#0a1b39}
+    .source-card{border-radius:18px}.source-card:hover{border-color:#438fff}
+    .source-badge{background:#0d2b56;color:#5bd7ff}
+    .paper-result{background:#07152e;border-color:#20467b;border-radius:14px}
+    .ai-output{background:#040c1c;border-color:#20467b;border-radius:14px}
+    @media(min-width:1000px){.wrap{width:min(1240px,calc(100% - 48px))}.ai-panel{padding:36px}.sources-grid{gap:20px}}
+    @media(max-width:580px){.wrap{width:calc(100% - 22px)}header{padding:34px 0 24px}.ai-panel{border-radius:18px}}
+
   </style>
 </head>
 <body>
