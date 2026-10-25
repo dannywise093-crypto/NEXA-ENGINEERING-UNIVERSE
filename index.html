@@ -12,6 +12,13 @@
     a{color:var(--cyan)}.wrap{width:min(1160px,calc(100% - 32px));margin:auto}.topbar{padding:18px 0;border-bottom:1px solid var(--line);background:#07101dcc}.brand{font-weight:850;letter-spacing:.12em;font-size:.9rem}.brand span{color:var(--cyan)}header{padding:64px 0 42px}.eyebrow{color:var(--green);font-size:.76rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase}h1{font-size:clamp(2.2rem,6vw,4.6rem);line-height:1.04;letter-spacing:-.045em;max-width:850px;margin:14px 0 18px}header p{max-width:740px;color:var(--muted);font-size:1.08rem}.search-panel{margin:0 0 52px;padding:clamp(18px,4vw,32px);border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,#122740,#0b1728);box-shadow:0 20px 70px #0003}.search-panel h2{margin:0 0 6px;font-size:1.35rem}.search-panel p{color:var(--muted);margin:0 0 18px}.search-row{display:flex;gap:10px}.search-row input,.source-form input{min-width:0;width:100%;padding:14px 15px;border:1px solid #38516d;border-radius:12px;background:#071321;color:var(--text);font:inherit;outline:none}.search-row input:focus,.source-form input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #67d7ff22}button,.btn{border:0;border-radius:12px;background:var(--cyan);color:#061321;font:inherit;font-weight:800;padding:13px 18px;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;white-space:nowrap}button:hover,.btn:hover{filter:brightness(1.08)}.quick-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.quick-links a{font-size:.86rem;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--muted)}.section-title{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:20px}.section-title h2{margin:0;font-size:clamp(1.6rem,3vw,2.2rem)}.section-title p{color:var(--muted);margin:0}.sources-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:58px}.source-card{display:flex;flex-direction:column;padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(160deg,#102039,#0b1727);min-width:0;transition:transform .18s,border-color .18s}.source-card:hover{transform:translateY(-3px);border-color:#4b7799}.source-badge{align-self:flex-start;font-size:.72rem;font-weight:850;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:#67d7ff17;color:var(--cyan);margin-bottom:13px}.source-card h3{font-size:1.2rem;margin:0 0 8px}.source-card p{color:var(--muted);font-size:.94rem;margin:0 0 18px;flex:1}.source-form{display:flex;gap:8px;margin-top:auto}.source-form input{padding:11px 12px;font-size:.9rem}.source-form button{padding:10px 12px;font-size:.9rem}.source-open{display:inline-block;margin-top:12px;font-size:.88rem;text-decoration:none}.note{border:1px solid var(--line);border-radius:16px;padding:18px 20px;color:var(--muted);margin-bottom:50px}.note strong{color:var(--text)}footer{border-top:1px solid var(--line);padding:24px 0 36px;color:var(--muted);font-size:.88rem}footer a{text-decoration:none}
     @media(max-width:850px){.sources-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.section-title{display:block}.section-title p{margin-top:8px}}
     @media(max-width:580px){.wrap{width:min(100% - 24px,1160px)}header{padding:44px 0 30px}.sources-grid{grid-template-columns:1fr}.search-row{flex-direction:column}.search-row button{width:100%}.source-form input{flex:1;width:50%}.source-form button{padding-inline:12px}}
+
+    .ai-panel{margin:0 0 52px;padding:clamp(18px,4vw,32px);border:1px solid #2e6076;border-radius:24px;background:linear-gradient(145deg,#102b3a,#0b1728);box-shadow:0 20px 70px #0003}
+    .ai-panel h2{margin:0 0 6px;font-size:clamp(1.5rem,3vw,2rem)}.ai-panel>p{color:var(--muted);margin:0 0 18px}
+    .ai-chat{display:grid;gap:12px}.ai-chat textarea{width:100%;min-height:100px;resize:vertical;padding:14px;border:1px solid #38516d;border-radius:12px;background:#071321;color:var(--text);font:inherit}
+    .ai-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.ai-actions small,.ai-status{color:var(--muted)}.ai-output{white-space:pre-wrap;overflow-wrap:anywhere;padding:16px;border:1px solid var(--line);border-radius:14px;background:#071321;min-height:60px}
+    .paper-results{display:grid;gap:10px;margin-top:12px}.paper-result{padding:14px;border:1px solid var(--line);border-radius:12px;background:#0b1727}.paper-result h4{margin:0 0 5px;font-size:1rem}.paper-result p{margin:5px 0;color:var(--muted);font-size:.9rem}.paper-result a{overflow-wrap:anywhere}
+
   </style>
 </head>
 <body>
@@ -22,6 +29,22 @@
     <p>Search trusted scholarly and engineering sources directly from one place. Enter a topic once, then open the source you want to explore. Searches run on the providers' own websites; their results and access policies are controlled by each provider.</p>
   </header>
   <main class="wrap">
+
+    <section class="ai-panel" id="nexa-ai" aria-labelledby="nexa-ai-title">
+      <div class="eyebrow">Free-first AI · Live research lookup</div>
+      <h2 id="nexa-ai-title">Ask NEXA Research Assistant</h2>
+      <p>Search current scholarly metadata from OpenAlex and Crossref, then ask AI to explain or compare the results. AI answers require a free-tier Gemini API key configured privately in Vercel.</p>
+      <form class="ai-chat" id="nexa-ai-form">
+        <label for="nexa-ai-question"><strong>Your research question</strong></label>
+        <textarea id="nexa-ai-question" maxlength="1200" required placeholder="e.g. Find recent papers on AI for solar power forecasting and explain the main research directions."></textarea>
+        <div class="ai-actions"><button id="nexa-ai-submit" type="submit">Search papers + ask AI ↗</button><small>Searches public metadata; full text may not be open access.</small></div>
+      </form>
+      <p class="ai-status" id="nexa-ai-status" role="status" aria-live="polite">Ready. Enter a research question to search live paper metadata.</p>
+      <div id="nexa-ai-papers" class="paper-results" aria-label="Research results"></div>
+      <h3>AI research synthesis</h3>
+      <div id="nexa-ai-answer" class="ai-output">Your AI-generated synthesis will appear here. Check sources before relying on conclusions.</div>
+    </section>
+
     <section class="search-panel" aria-labelledby="all-search-title">
       <h2 id="all-search-title">Start a research search</h2>
       <p>Enter a topic, paper title, author, DOI, engineering problem, or dataset keyword.</p>
@@ -131,5 +154,70 @@
       });
     })();
   </script>
+
+  <script>
+  (() => {
+    const form = document.getElementById('nexa-ai-form');
+    if (!form) return;
+    const question = document.getElementById('nexa-ai-question');
+    const submit = document.getElementById('nexa-ai-submit');
+    const status = document.getElementById('nexa-ai-status');
+    const papersBox = document.getElementById('nexa-ai-papers');
+    const answerBox = document.getElementById('nexa-ai-answer');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const q = question.value.trim();
+      if (!q) return;
+      submit.disabled = true;
+      status.textContent = 'Searching live research metadata…';
+      papersBox.replaceChildren();
+      answerBox.textContent = 'Working…';
+      let papers = [];
+      try {
+        const researchResponse = await fetch('/api/research?q=' + encodeURIComponent(q));
+        const researchData = await researchResponse.json();
+        if (!researchResponse.ok) throw new Error(researchData.error || 'Research search failed.');
+        papers = researchData.results || [];
+        if (!papers.length) status.textContent = 'No matching paper records found. AI will answer without retrieved paper context.';
+        else {
+          status.textContent = 'Found ' + papers.length + ' paper records. Asking the AI to synthesize them…';
+          for (const paper of papers) {
+            const card = document.createElement('article'); card.className = 'paper-result';
+            const title = document.createElement('h4'); title.textContent = paper.title || 'Untitled research record';
+            const meta = document.createElement('p'); meta.textContent = [paper.year || 'Date unavailable', paper.source || 'Research source', paper.doi ? 'DOI: ' + paper.doi : ''].filter(Boolean).join(' · ');
+            card.append(title, meta);
+            if (paper.url) { const link = document.createElement('a'); link.href = paper.url; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = 'Open original record ↗'; card.append(link); }
+            papersBox.append(card);
+          }
+        }
+      } catch (error) {
+        status.textContent = 'Research lookup issue: ' + error.message;
+      }
+      try {
+        const aiResponse = await fetch('/api/chat', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({question:q, papers})
+        });
+        const data = await aiResponse.json();
+        if (!aiResponse.ok) {
+          if (aiResponse.status === 503 && data.code === 'MISSING_API_KEY') {
+            answerBox.textContent = 'The research lookup is ready, but AI is not configured yet. In Vercel, open Project → Settings → Environment Variables and add GEMINI_API_KEY using a key from Google AI Studio. Add it to Production (and Preview if desired), save, then redeploy. Keep the key private—never put it in this page or GitHub.';
+            status.textContent = 'Live paper search works; AI setup needs one secure environment variable.';
+          } else {
+            answerBox.textContent = data.error || 'The AI request failed. Please try again later.';
+            status.textContent = 'AI request did not complete.';
+          }
+          return;
+        }
+        answerBox.textContent = data.answer || 'No text response was returned.';
+        status.textContent = 'Done. Review the linked source records above and verify important claims against the originals.';
+      } catch (error) {
+        answerBox.textContent = 'Could not reach the AI service. Please try again later.';
+        status.textContent = 'AI connection error.';
+      } finally { submit.disabled = false; }
+    });
+  })();
+  </script>
+
 </body>
 </html>
