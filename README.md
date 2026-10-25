@@ -2,16 +2,16 @@
 
 A multi-domain AI engineering research repository grounded in literature, experimentation, and systems thinking.
 
-## Research sources
+## Official research sources
 
-This project is intentionally aligned with open scientific and engineering research sources:
+This project is intentionally aligned with real scholarly and engineering sources:
 
-- arXiv
-- Semantic Scholar
-- PubMed
-- OpenAlex
-- NASA Technical Reports Server
-- Crossref
+- arXiv: https://arxiv.org/
+- Semantic Scholar: https://www.semanticscholar.org/
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/
+- OpenAlex: https://openalex.org/
+- NASA Technical Reports Server: https://ntrs.nasa.gov/
+- Crossref: https://www.crossref.org/
 
 These sources support literature review, benchmarking, engineering insight, and cross-domain research discovery.
 
@@ -20,7 +20,7 @@ These sources support literature review, benchmarking, engineering insight, and 
 - research foundation established
 - multi-domain AI structure organized
 - landing page created
-- research sources catalog added
+- official research sources integrated
 
 ## Repository structure
 

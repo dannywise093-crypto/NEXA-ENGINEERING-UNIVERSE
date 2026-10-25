@@ -1,15 +1,21 @@
 # NEXA Engineering Universe Research Sources
 
-This repository is grounded in a multi-domain research strategy that incorporates academic, scientific, and engineering knowledge sources.
+This repository is grounded in a multi-domain research strategy that incorporates academic, scientific, and engineering knowledge sources from official institutions and research platforms.
 
-## Curated sources
+## Official sources
 
-- arXiv: Preprints and cutting-edge machine learning, AI, systems, and engineering research.
-- Semantic Scholar: Citation graphs, concept discovery, and literature relationships.
-- PubMed: Biomedical and scientific literature for health, life sciences, and applied research.
-- OpenAlex: Open scholarly metadata for interdisciplinary discovery and literature mapping.
-- NASA Technical Reports Server: Technical reports, engineering concepts, and aerospace research.
-- Crossref: DOI metadata and scholarly references for publication discovery.
+- arXiv — https://arxiv.org/
+  - Preprints and cutting-edge machine learning, AI, systems, and engineering research.
+- Semantic Scholar — https://www.semanticscholar.org/
+  - Scholarly discovery, citation graphs, and literature relationships.
+- PubMed — https://pubmed.ncbi.nlm.nih.gov/
+  - Biomedical and scientific literature for health, life sciences, and applied research.
+- OpenAlex — https://openalex.org/
+  - Open scholarly metadata for interdisciplinary discovery and literature mapping.
+- NASA Technical Reports Server — https://ntrs.nasa.gov/
+  - Technical reports, engineering concepts, and aerospace research.
+- Crossref — https://www.crossref.org/
+  - DOI metadata and scholarly references for publication discovery.
 
 ## Use in this project
 
@@ -22,7 +28,7 @@ These sources support:
 
 ## Research workflow
 
-1. Search across domains using the relevant source.
+1. Search across domains using the relevant official source.
 2. Capture foundational papers, technical reports, and supporting references.
 3. Map findings to engineering, scientific, or AI application themes.
 4. Compare literature-based insights against experimental results.

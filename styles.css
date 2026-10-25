@@ -8,7 +8,16 @@
   background: rgba(11, 17, 27, 0.72);
   border: 1px solid var(--line);
   border-radius: 22px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.source-link {
+  display: block;
+  height: 100%;
   padding: 24px 20px;
+  color: inherit;
+  text-decoration: none;
 }
 
 .source-badge {
