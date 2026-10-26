@@ -226,3 +226,4 @@ export default async function handler(req, res) {
   return res.status(timedOut ? 504 : 502).json({
     error: "OpenAI, Grok, and Claude could not complete the request. Check the provider API keys, model access, and usage limits in Vercel logs, then try again."
   });
+}
