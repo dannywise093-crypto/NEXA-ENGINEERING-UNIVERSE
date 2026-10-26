@@ -34,8 +34,8 @@ export default async function handler(req, res) {
     : "No previous messages.";
 
   const normalizedQuestion = question.toLowerCase().replace(/[!.?,]+/g, " ").trim();
-  const founderQuestion = /\\b(founder|founded|who (?:is|was) .*?(?:owner|ceo)|owner|chief executive officer|\\bceo\\b)\\b/.test(normalizedQuestion)
-    && /\\b(nexa|engineering universe|nexa engineering)\\b/.test(normalizedQuestion);
+  const founderQuestion = /\b(founder|founded|owner|chief executive officer|ceo)\b/.test(normalizedQuestion)
+    && (/\b(nexa|engineering universe|nexa engineering)\b/.test(normalizedQuestion) || /\b(your founder|founded you|founder of you)\b/.test(normalizedQuestion));
   if (founderQuestion) {
     return res.status(200).json({
       answer: "Danny Wise is the founder, owner, and CEO of NEXA Engineering Universe.",
