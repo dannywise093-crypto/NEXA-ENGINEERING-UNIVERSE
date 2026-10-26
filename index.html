@@ -1,244 +1,83 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#08111f">
-  <meta name="description" content="Search scholarly papers, engineering reports, and open research datasets across trusted research sources.">
-  <title>NEXA Engineering Universe — Research Portal</title>
-  <style>
-    :root{color-scheme:dark;--bg:#07101d;--panel:#0e1b2d;--panel2:#12233a;--line:#263b55;--text:#edf5ff;--muted:#a7b9cf;--cyan:#67d7ff;--green:#72f0c0}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#143453 0,transparent 38%),var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    a{color:var(--cyan)}.wrap{width:min(1160px,calc(100% - 32px));margin:auto}.topbar{padding:18px 0;border-bottom:1px solid var(--line);background:#07101dcc}.brand{font-weight:850;letter-spacing:.12em;font-size:.9rem}.brand span{color:var(--cyan)}header{padding:64px 0 42px}.eyebrow{color:var(--green);font-size:.76rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase}h1{font-size:clamp(2.2rem,6vw,4.6rem);line-height:1.04;letter-spacing:-.045em;max-width:850px;margin:14px 0 18px}header p{max-width:740px;color:var(--muted);font-size:1.08rem}.search-panel{margin:0 0 52px;padding:clamp(18px,4vw,32px);border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,#122740,#0b1728);box-shadow:0 20px 70px #0003}.search-panel h2{margin:0 0 6px;font-size:1.35rem}.search-panel p{color:var(--muted);margin:0 0 18px}.search-row{display:flex;gap:10px}.search-row input,.source-form input{min-width:0;width:100%;padding:14px 15px;border:1px solid #38516d;border-radius:12px;background:#071321;color:var(--text);font:inherit;outline:none}.search-row input:focus,.source-form input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #67d7ff22}button,.btn{border:0;border-radius:12px;background:var(--cyan);color:#061321;font:inherit;font-weight:800;padding:13px 18px;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;white-space:nowrap}button:hover,.btn:hover{filter:brightness(1.08)}.quick-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.quick-links a{font-size:.86rem;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--muted)}.section-title{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:20px}.section-title h2{margin:0;font-size:clamp(1.6rem,3vw,2.2rem)}.section-title p{color:var(--muted);margin:0}.sources-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:58px}.source-card{display:flex;flex-direction:column;padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(160deg,#102039,#0b1727);min-width:0;transition:transform .18s,border-color .18s}.source-card:hover{transform:translateY(-3px);border-color:#4b7799}.source-badge{align-self:flex-start;font-size:.72rem;font-weight:850;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:#67d7ff17;color:var(--cyan);margin-bottom:13px}.source-card h3{font-size:1.2rem;margin:0 0 8px}.source-card p{color:var(--muted);font-size:.94rem;margin:0 0 18px;flex:1}.source-form{display:flex;gap:8px;margin-top:auto}.source-form input{padding:11px 12px;font-size:.9rem}.source-form button{padding:10px 12px;font-size:.9rem}.source-open{display:inline-block;margin-top:12px;font-size:.88rem;text-decoration:none}.note{border:1px solid var(--line);border-radius:16px;padding:18px 20px;color:var(--muted);margin-bottom:50px}.note strong{color:var(--text)}footer{border-top:1px solid var(--line);padding:24px 0 36px;color:var(--muted);font-size:.88rem}footer a{text-decoration:none}
-    @media(max-width:850px){.sources-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.section-title{display:block}.section-title p{margin-top:8px}}
-    @media(max-width:580px){.wrap{width:min(100% - 24px,1160px)}header{padding:44px 0 30px}.sources-grid{grid-template-columns:1fr}.search-row{flex-direction:column}.search-row button{width:100%}.source-form input{flex:1;width:50%}.source-form button{padding-inline:12px}}
-
-    .ai-panel{margin:0 0 52px;padding:clamp(18px,4vw,32px);border:1px solid #2e6076;border-radius:24px;background:linear-gradient(145deg,#102b3a,#0b1728);box-shadow:0 20px 70px #0003}
-    .ai-panel h2{margin:0 0 6px;font-size:clamp(1.5rem,3vw,2rem)}.ai-panel>p{color:var(--muted);margin:0 0 18px}
-    .ai-chat{display:grid;gap:12px}.ai-chat textarea{width:100%;min-height:100px;resize:vertical;padding:14px;border:1px solid #38516d;border-radius:12px;background:#071321;color:var(--text);font:inherit}
-    .ai-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.ai-actions small,.ai-status{color:var(--muted)}.ai-output{white-space:pre-wrap;overflow-wrap:anywhere;padding:16px;border:1px solid var(--line);border-radius:14px;background:#071321;min-height:60px}
-    .paper-results{display:grid;gap:10px;margin-top:12px}.paper-result{padding:14px;border:1px solid var(--line);border-radius:12px;background:#0b1727}.paper-result h4{margin:0 0 5px;font-size:1rem}.paper-result p{margin:5px 0;color:var(--muted);font-size:.9rem}.paper-result a{overflow-wrap:anywhere}
-
-  
-    /* NEXA AI Chat interface refresh */
-    :root{color-scheme:dark;--bg:#030918;--panel:#07142b;--panel2:#0c1c3b;--line:#173b72;--text:#f4f8ff;--muted:#9ec9f1;--cyan:#4ccfff;--green:#72e7ff;--purple:#714bff}
-    body{background:radial-gradient(ellipse at 78% 12%,#14275b 0,transparent 38%),radial-gradient(ellipse at 52% 90%,#170d3e 0,transparent 35%),#030918;color:var(--text)}
-    .topbar{background:#050b1ddd;border-bottom-color:#14315e;position:sticky;top:0;z-index:5;padding:15px 0}
-    .brand{font-size:1rem;letter-spacing:.14em}.brand span:first-child{color:#5c9bff}
-    header{padding:42px 0 28px}h1{font-size:clamp(2.3rem,5vw,4rem);background:linear-gradient(90deg,#31d5ff,#7880ff,#c18bff);-webkit-background-clip:text;background-clip:text;color:transparent}
-    .eyebrow{color:#5ddaff}.search-panel,.ai-panel,.source-card,.note{background:linear-gradient(145deg,#071733ee,#090f25ee);border-color:#17427d;box-shadow:0 18px 55px #0004}
-    .ai-panel{border-color:#1d58a5;background:linear-gradient(145deg,#071833,#080f25);padding:clamp(20px,4vw,40px);border-radius:24px}
-    .ai-panel h2{font-size:clamp(1.8rem,4vw,2.7rem);letter-spacing:-.035em}
-    .ai-panel>p{line-height:1.8}
-    .ai-chat textarea,.search-row input,.source-form input{background:#040c1c;border-color:#1d4b8b;border-radius:14px}
-    button,.btn{background:linear-gradient(110deg,#087cff,#6944ff);color:white;border:1px solid #408cff;box-shadow:0 5px 20px #164bff30}
-    .quick-links a{border-color:#24457b;color:#b9d8ff;background:#0a1b39}
-    .source-card{border-radius:18px}.source-card:hover{border-color:#438fff}
-    .source-badge{background:#0d2b56;color:#5bd7ff}
-    .paper-result{background:#07152e;border-color:#20467b;border-radius:14px}
-    .ai-output{background:#040c1c;border-color:#20467b;border-radius:14px}
-    @media(min-width:1000px){.wrap{width:min(1240px,calc(100% - 48px))}.ai-panel{padding:36px}.sources-grid{gap:20px}}
-    @media(max-width:580px){.wrap{width:calc(100% - 22px)}header{padding:34px 0 24px}.ai-panel{border-radius:18px}}
-
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050817"><meta name="description" content="NEXA AI Chat — an engineering and research assistant with optional live scholarly search.">
+<title>NEXA AI Chat — Engineering Universe</title>
+<style>
+:root{color-scheme:dark;--bg:#050711;--panel:#090b18;--panel2:#0d1023;--line:#29213d;--text:#f5f1ff;--muted:#a9a2c2;--purple:#b78aff;--violet:#8055ff;--blue:#4b8dff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 72% 15%,#24103a 0,transparent 36%),#050711;color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+.app{display:grid;grid-template-columns:270px minmax(0,1fr);gap:16px;min-height:100dvh;padding:16px}.sidebar,.chat-shell,.composer-panel{border:1px solid var(--line);background:#090914eF;border-radius:16px}.sidebar{display:flex;flex-direction:column;padding:16px;min-height:calc(100dvh - 32px)}.brand{display:flex;align-items:center;gap:10px;padding:4px 3px 24px;font-size:14px;font-weight:850;letter-spacing:.14em}.logo{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:linear-gradient(140deg,#55d8ff,#8255ff);color:#090719;font-size:19px;box-shadow:0 0 24px #8055ff33}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.18em;margin-top:2px}.new-chat,.clear-btn{width:100%;border:1px solid #9d7bc1;background:transparent;color:#eee1ff;border-radius:10px;padding:11px 12px;text-align:left}.new-chat:hover,.clear-btn:hover{background:#21132f}.new-chat span{color:var(--purple);font-size:18px;margin-right:9px}.history-label{color:#8f87a7;font-size:10px;letter-spacing:.17em;text-transform:uppercase;margin:25px 5px 10px}.history{display:grid;gap:5px;overflow:auto;flex:1;align-content:start}.history-item{border:1px solid transparent;background:transparent;color:#c9c3db;text-align:left;padding:10px;border-radius:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.history-item.active,.history-item:hover{background:#171324;border-color:#332341;color:white}.sidebar-bottom{display:grid;gap:12px;margin-top:20px}.profile{border:1px dashed #59466e;border-radius:10px;padding:12px;color:#b6a6ce;font-size:12px}.profile b{color:#e7d6ff}.clear-btn{font-size:12px;text-align:center;padding:9px}.main{display:flex;flex-direction:column;gap:16px;min-width:0;min-height:calc(100dvh - 32px)}.chat-shell{flex:1;min-height:430px;display:flex;flex-direction:column;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,#1b102c 0,transparent 58%),#080813}.topline{height:60px;border-bottom:1px solid #211b30;display:flex;align-items:center;justify-content:space-between;padding:0 22px;gap:12px}.topline-title{font-weight:700}.online{font-size:12px;color:#a8e7cb}.online:before{content:"";display:inline-block;width:7px;height:7px;background:#6de5b4;border-radius:50%;margin-right:8px}.mobile-brand{display:none}.messages{flex:1;overflow:auto;padding:clamp(18px,4vw,46px);display:flex;flex-direction:column;gap:24px}.welcome{margin:auto;max-width:660px;text-align:center;padding:24px 0}.orb{width:58px;height:58px;border-radius:20px;margin:0 auto 22px;display:grid;place-items:center;font-size:27px;color:white;background:linear-gradient(140deg,#2cbde8,#8155ff);box-shadow:0 0 55px #7443ff44}.welcome h1{font-size:clamp(27px,4vw,42px);letter-spacing:-.04em;line-height:1.12;margin:0 0 13px}.gradient{background:linear-gradient(90deg,#5de0ff,#bb8cff);color:transparent;background-clip:text}.welcome p{color:var(--muted);max-width:520px;margin:0 auto 25px}.suggestions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;text-align:left}.suggestion{border:1px solid #332642;border-radius:12px;background:#0d0b19;color:#ded5ef;padding:14px;min-height:70px}.suggestion:hover{border-color:#8965bd;background:#171025}.suggestion strong{display:block;font-size:13px;margin-bottom:4px}.suggestion span{font-size:12px;color:#a69abf}.message{display:flex;gap:12px;max-width:850px;width:100%;margin:0 auto;align-items:flex-start}.avatar{width:32px;height:32px;flex:0 0 32px;display:grid;place-items:center;border-radius:10px;background:#201532;color:#d5b6ff;font-weight:800}.message.user .avatar{background:#153053;color:#9edcff}.bubble{min-width:0;white-space:pre-wrap;overflow-wrap:anywhere;padding:5px 0;color:#e8e2f5}.message.user .bubble{background:#111328;border:1px solid #292441;border-radius:13px;padding:12px 15px}.bubble p{margin:0 0 10px}.bubble p:last-child{margin-bottom:0}.source-list{display:grid;gap:9px;margin-top:12px}.source-card{border:1px solid #302543;background:#0c0b18;border-radius:10px;padding:11px 13px}.source-card a{color:#9edfff;text-decoration:none}.source-card a:hover{text-decoration:underline}.source-meta{color:#a39ab9;font-size:12px;margin-top:4px}.typing{color:#c8b1ef}.composer-panel{padding:12px 14px;background:#090914}.composer{display:flex;gap:12px;align-items:flex-end;border:1px solid #342545;border-radius:14px;background:#070711;padding:12px 12px 12px 16px}.composer:focus-within{border-color:#7653a3;box-shadow:0 0 0 3px #a86bff12}.composer textarea{flex:1;min-width:0;resize:vertical;min-height:44px;max-height:180px;border:0;outline:0;background:transparent;color:white;padding:10px 0}.composer textarea::placeholder{color:#756c89}.send{flex:0 0 42px;width:42px;height:42px;border:0;border-radius:12px;color:#fff;background:linear-gradient(140deg,#248fe8,#8050ff);font-size:20px}.send:disabled{opacity:.45;cursor:wait}.composer-hint{font-size:11px;color:#817892;text-align:center;padding:9px 0 0}.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:0 4px}.toggle-wrap{display:flex;align-items:center;gap:10px;color:#c7bddb;font-size:13px}.switch{position:relative;width:44px;height:25px;display:inline-block}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;border-radius:99px;background:#191627;border:1px solid #4a3a5b;cursor:pointer}.slider:before{content:"";position:absolute;width:17px;height:17px;left:3px;top:3px;border-radius:50%;background:#c8b1ff;transition:.18s}.switch input:checked+.slider{background:#37215b;border-color:#9868e9}.switch input:checked+.slider:before{transform:translateX(19px);background:#fff}.controls select{background:#0c0b18;border:1px solid #332642;color:#d9cfea;border-radius:9px;padding:9px 12px;max-width:100%;font-size:12px}.status{margin-left:auto;color:#8d849f;font-size:11px}.error{color:#ffb8c4}.paper-count{color:#9ce6ff;font-size:12px;margin-top:12px}
+@media(max-width:760px){.app{grid-template-columns:1fr;padding:8px;gap:8px}.sidebar{min-height:0;padding:10px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}.brand{padding:0;font-size:12px}.logo{width:30px;height:30px}.new-chat{width:auto;padding:8px 11px;font-size:12px}.history-label,.history,.sidebar-bottom{display:none}.main{min-height:calc(100dvh - 95px);gap:8px}.chat-shell{min-height:55vh}.topline{height:48px;padding:0 14px}.messages{padding:18px 12px}.welcome{padding:12px 0}.suggestions{grid-template-columns:1fr}.suggestion{min-height:58px}.composer-panel{padding:8px}.controls{gap:8px}.status{width:100%;margin-left:0}.profile{display:none}.mobile-brand{display:block}}
+@media(min-width:761px){.sidebar{position:sticky;top:16px;height:calc(100dvh - 32px)}}
+</style>
 </head>
 <body>
-  <div class="topbar"><div class="wrap brand"><span>NEXA</span> ENGINEERING UNIVERSE <span aria-hidden="true">/</span> RESEARCH PORTAL</div></div>
-  <header class="wrap">
-    <div class="eyebrow">Open knowledge · Engineering · AI · Science</div>
-    <h1>Find papers, technical reports, and research data.</h1>
-    <p>Search trusted scholarly and engineering sources directly from one place. Enter a topic once, then open the source you want to explore. Searches run on the providers' own websites; their results and access policies are controlled by each provider.</p>
-  </header>
-  <main class="wrap">
-
-    <section class="ai-panel" id="nexa-ai" aria-labelledby="nexa-ai-title">
-      <div class="eyebrow">Free-first AI · Live research lookup</div>
-      <h2 id="nexa-ai-title">Ask NEXA Research Assistant</h2>
-      <p>Search current scholarly metadata from OpenAlex and Crossref, then ask AI to explain or compare the results. AI answers require a free-tier Gemini API key configured privately in Vercel.</p>
-      <form class="ai-chat" id="nexa-ai-form">
-        <label for="nexa-ai-question"><strong>Your research question</strong></label>
-        <textarea id="nexa-ai-question" maxlength="1200" required placeholder="e.g. Find recent papers on AI for solar power forecasting and explain the main research directions."></textarea>
-        <div class="ai-actions"><button id="nexa-ai-submit" type="submit">Search papers + ask AI ↗</button><small>Searches public metadata; full text may not be open access.</small></div>
-      </form>
-      <p class="ai-status" id="nexa-ai-status" role="status" aria-live="polite">Ready. Enter a research question to search live paper metadata.</p>
-      <div id="nexa-ai-papers" class="paper-results" aria-label="Research results"></div>
-      <h3>AI research synthesis</h3>
-      <div id="nexa-ai-answer" class="ai-output">Your AI-generated synthesis will appear here. Check sources before relying on conclusions.</div>
-    </section>
-
-    <section class="search-panel" aria-labelledby="all-search-title">
-      <h2 id="all-search-title">Start a research search</h2>
-      <p>Enter a topic, paper title, author, DOI, engineering problem, or dataset keyword.</p>
-      <form class="search-row" id="global-search">
-        <input id="global-query" type="search" placeholder="e.g. AI for renewable energy forecasting" aria-label="Research topic" required>
-        <button type="submit">Choose a source ↓</button>
-      </form>
-      <div class="quick-links" aria-label="Popular topics">
-        <a href="#" data-topic="artificial intelligence">Artificial intelligence</a>
-        <a href="#" data-topic="renewable energy systems">Renewable energy</a>
-        <a href="#" data-topic="aerospace engineering">Aerospace engineering</a>
-        <a href="#" data-topic="robotics">Robotics</a>
-        <a href="#" data-topic="climate data">Climate data</a>
+<div class="app">
+<aside class="sidebar" aria-label="Conversation sidebar">
+  <div class="brand"><div class="logo">✦</div><div>NEXA AI<small>ENGINEERING UNIVERSE</small></div></div>
+  <button class="new-chat" id="new-chat"><span>＋</span> New Conversation</button>
+  <div class="history-label">Recent conversations</div><nav class="history" id="history" aria-label="Recent conversations"></nav>
+  <div class="sidebar-bottom"><button class="clear-btn" id="clear-chat">♧ &nbsp; Clear Conversations</button><div class="profile"><b>NEXA Research AI</b><br>Research · Engineering · Science<br><span id="version">Web-enabled assistant</span></div></div>
+</aside>
+<main class="main">
+<section class="chat-shell">
+  <div class="topline"><div class="topline-title"><span class="mobile-brand">✦ NEXA AI &nbsp;·&nbsp; </span>AI Chat</div><div class="online">Assistant ready</div></div>
+  <div class="messages" id="messages" aria-live="polite">
+    <div class="welcome" id="welcome"><div class="orb">✦</div><h1>What are we <span class="gradient">exploring</span> today?</h1><p>Your AI research companion for engineering, science, technology, and ideas. Ask a question or start with a suggestion.</p>
+      <div class="suggestions">
+        <button class="suggestion" data-prompt="Explain recent advances in AI for engineering design."><strong>⌘ &nbsp; Engineering AI</strong><span>Explore new design methods</span></button>
+        <button class="suggestion" data-prompt="Find and summarize research on renewable energy storage."><strong>ϟ &nbsp; Energy research</strong><span>Discover papers and findings</span></button>
+        <button class="suggestion" data-prompt="Explain how robotics and computer vision work together."><strong>◎ &nbsp; Robotics</strong><span>Understand complex systems</span></button>
+        <button class="suggestion" data-prompt="Give me a research plan for a new engineering project."><strong>✧ &nbsp; Research planning</strong><span>Turn an idea into a plan</span></button>
       </div>
-    </section>
-    <section id="sources" aria-labelledby="sources-title">
-      <div class="section-title"><div><div class="eyebrow">Research directory</div><h2 id="sources-title">Search by source</h2></div><p>Each search opens the provider's live search page.</p></div>
-      <div class="sources-grid">
-        <article class="source-card" data-source="arxiv">
-          <div class="source-badge">arXiv · AI & engineering</div><h3>AI and systems research</h3>
-          <p>Open-access preprints in machine learning, mathematics, physics, robotics, computer science, and engineering.</p>
-          <form class="source-form" data-base="https://arxiv.org/search/" data-param="query" data-extra="searchtype=all">
-            <input type="search" aria-label="Search arXiv" placeholder="Search papers…" required><button>Search ↗</button>
-          </form><a class="source-open" href="https://arxiv.org/" target="_blank" rel="noopener noreferrer">Browse arXiv home ↗</a>
-        </article>
-        <article class="source-card" data-source="semantic">
-          <div class="source-badge">Semantic Scholar</div><h3>Paper and citation discovery</h3>
-          <p>Find research papers, authors, related work, influential citations, and academic connections.</p>
-          <form class="source-form" data-base="https://www.semanticscholar.org/search" data-param="q">
-            <input type="search" aria-label="Search Semantic Scholar" placeholder="Search papers or authors…" required><button>Search ↗</button>
-          </form><a class="source-open" href="https://www.semanticscholar.org/" target="_blank" rel="noopener noreferrer">Browse Semantic Scholar ↗</a>
-        </article>
-        <article class="source-card" data-source="pubmed">
-          <div class="source-badge">PubMed · Biomedical</div><h3>Scientific and health literature</h3>
-          <p>Search biomedical, clinical, public-health, and life-science literature indexed by the National Library of Medicine.</p>
-          <form class="source-form" data-base="https://pubmed.ncbi.nlm.nih.gov/" data-param="term">
-            <input type="search" aria-label="Search PubMed" placeholder="Search biomedical research…" required><button>Search ↗</button>
-          </form><a class="source-open" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener noreferrer">Browse PubMed ↗</a>
-        </article>
-        <article class="source-card" data-source="openalex">
-          <div class="source-badge">OpenAlex · Open scholarship</div><h3>Open scholarly metadata</h3>
-          <p>Explore works, researchers, institutions, topics, and open scholarly metadata across disciplines.</p>
-          <form class="source-form" data-base="https://openalex.org/works" data-param="search">
-            <input type="search" aria-label="Search OpenAlex" placeholder="Search works or topics…" required><button>Search ↗</button>
-          </form><a class="source-open" href="https://openalex.org/" target="_blank" rel="noopener noreferrer">Browse OpenAlex ↗</a>
-        </article>
-        <article class="source-card" data-source="nasa">
-          <div class="source-badge">NASA TRS · Technical reports</div><h3>NASA Technical Reports Server</h3>
-          <p>Search aerospace research, NASA technical publications, mission reports, engineering, and space-science documents.</p>
-          <form class="source-form" data-base="https://ntrs.nasa.gov/search" data-param="q">
-            <input type="search" aria-label="Search NASA Technical Reports Server" placeholder="Search NASA reports…" required><button>Search ↗</button>
-          </form><a class="source-open" href="https://ntrs.nasa.gov/" target="_blank" rel="noopener noreferrer">Browse NASA TRS ↗</a>
-        </article>
-        <article class="source-card" data-source="crossref">
-          <div class="source-badge">Crossref · DOI metadata</div><h3>References and publications</h3>
-          <p>Find publications by title, author, DOI, journal, and bibliographic metadata for reference checking.</p>
-          <form class="source-form" data-base="https://search.crossref.org/" data-param="q">
-            <input type="search" aria-label="Search Crossref" placeholder="Search title, author, DOI…" required><button>Search ↗</button>
-          </form><a class="source-open" href="https://www.crossref.org/" target="_blank" rel="noopener noreferrer">Browse Crossref ↗</a>
-        </article>
-        <article class="source-card" data-source="datasets">
-          <div class="source-badge">Dataset discovery</div><h3>Google Dataset Search</h3>
-          <p>Discover published datasets from research repositories, universities, public agencies, and data providers.</p>
-          <form class="source-form" data-base="https://datasetsearch.research.google.com/" data-param="query">
-            <input type="search" aria-label="Search Google Dataset Search" placeholder="Search datasets…" required><button>Search ↗</button>
-          </form><a class="source-open" href="https://datasetsearch.research.google.com/" target="_blank" rel="noopener noreferrer">Browse dataset search ↗</a>
-        </article>
-      </div>
-    </section>
-    <aside class="note"><strong>Research note:</strong> NEXA links to external search services; it does not claim to host or independently verify their papers or datasets. Some full texts or datasets may require institutional access, a provider account, or acceptance of the provider's terms. Check publication dates, methods, and source quality before relying on findings.</aside>
-  </main>
-  <footer><div class="wrap">NEXA Engineering Universe · Research discovery portal · <a href="https://github.com/dannywise093-crypto/NEXA-ENGINEERING-UNIVERSE" target="_blank" rel="noopener noreferrer">View source on GitHub ↗</a></div></footer>
-  <script>
-    (() => {
-      const globalInput = document.getElementById('global-query');
-      const forms = [...document.querySelectorAll('.source-form')];
-      function searchUrl(form, query) {
-        const url = new URL(form.dataset.base);
-        url.searchParams.set(form.dataset.param || 'q', query.trim());
-        if (form.dataset.extra) new URLSearchParams(form.dataset.extra).forEach((value, key) => url.searchParams.set(key, value));
-        return url.toString();
-      }
-      forms.forEach(form => {
-        form.addEventListener('submit', event => {
-          event.preventDefault();
-          const input = form.querySelector('input');
-          const query = input.value.trim();
-          if (!query) { input.focus(); return; }
-          window.open(searchUrl(form, query), '_blank', 'noopener,noreferrer');
-        });
-      });
-      document.getElementById('global-search').addEventListener('submit', event => {
-        event.preventDefault();
-        const query = globalInput.value.trim();
-        if (!query) return;
-        forms.forEach(form => form.querySelector('input').value = query);
-        document.getElementById('sources-title').scrollIntoView({behavior:'smooth', block:'start'});
-        const firstInput = forms[0]?.querySelector('input');
-        if (firstInput) firstInput.focus({preventScroll:true});
-      });
-      document.querySelectorAll('[data-topic]').forEach(link => {
-        link.addEventListener('click', event => {
-          event.preventDefault();
-          globalInput.value = link.dataset.topic;
-          document.getElementById('global-search').requestSubmit();
-        });
-      });
-    })();
-  </script>
-
-  <script>
-  (() => {
-    const form = document.getElementById('nexa-ai-form');
-    if (!form) return;
-    const question = document.getElementById('nexa-ai-question');
-    const submit = document.getElementById('nexa-ai-submit');
-    const status = document.getElementById('nexa-ai-status');
-    const papersBox = document.getElementById('nexa-ai-papers');
-    const answerBox = document.getElementById('nexa-ai-answer');
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const q = question.value.trim();
-      if (!q) return;
-      submit.disabled = true;
-      status.textContent = 'Searching live research metadata…';
-      papersBox.replaceChildren();
-      answerBox.textContent = 'Working…';
-      let papers = [];
-      try {
-        const researchResponse = await fetch('/api/research?q=' + encodeURIComponent(q));
-        const researchData = await researchResponse.json();
-        if (!researchResponse.ok) throw new Error(researchData.error || 'Research search failed.');
-        papers = researchData.results || [];
-        if (!papers.length) status.textContent = 'No matching paper records found. AI will answer without retrieved paper context.';
-        else {
-          status.textContent = 'Found ' + papers.length + ' paper records. Asking the AI to synthesize them…';
-          for (const paper of papers) {
-            const card = document.createElement('article'); card.className = 'paper-result';
-            const title = document.createElement('h4'); title.textContent = paper.title || 'Untitled research record';
-            const meta = document.createElement('p'); meta.textContent = [paper.year || 'Date unavailable', paper.source || 'Research source', paper.doi ? 'DOI: ' + paper.doi : ''].filter(Boolean).join(' · ');
-            card.append(title, meta);
-            if (paper.url) { const link = document.createElement('a'); link.href = paper.url; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = 'Open original record ↗'; card.append(link); }
-            papersBox.append(card);
-          }
-        }
-      } catch (error) {
-        status.textContent = 'Research lookup issue: ' + error.message;
-      }
-      try {
-        const aiResponse = await fetch('/api/chat', {
-          method: 'POST', headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({question:q, papers})
-        });
-        const data = await aiResponse.json();
-        if (!aiResponse.ok) {
-          if (aiResponse.status === 503 && data.code === 'MISSING_API_KEY') {
-            answerBox.textContent = 'The research lookup is ready, but AI is not configured yet. In Vercel, open Project → Settings → Environment Variables and add GEMINI_API_KEY using a key from Google AI Studio. Add it to Production (and Preview if desired), save, then redeploy. Keep the key private—never put it in this page or GitHub.';
-            status.textContent = 'Live paper search works; AI setup needs one secure environment variable.';
-          } else {
-            answerBox.textContent = data.error || 'The AI request failed. Please try again later.';
-            status.textContent = 'AI request did not complete.';
-          }
-          return;
-        }
-        answerBox.textContent = data.answer || 'No text response was returned.';
-        status.textContent = 'Done. Review the linked source records above and verify important claims against the originals.';
-      } catch (error) {
-        answerBox.textContent = 'Could not reach the AI service. Please try again later.';
-        status.textContent = 'AI connection error.';
-      } finally { submit.disabled = false; }
-    });
-  })();
-  </script>
-
+    </div>
+  </div>
+</section>
+<section class="composer-panel">
+<form id="chat-form"><div class="composer"><textarea id="prompt" rows="1" maxlength="1200" placeholder="Message NEXA AI…" aria-label="Message NEXA AI" required></textarea><button class="send" id="send" type="submit" aria-label="Send message">➤</button></div><div class="composer-hint">NEXA can make mistakes. Verify important research claims with the original sources.</div></form>
+</section>
+<div class="controls">
+  <label class="toggle-wrap"><span class="switch"><input type="checkbox" id="web-access" checked><span class="slider"></span></span>Web Access <span title="Searches public Crossref and OpenAlex paper metadata before answering">ⓘ</span></label>
+  <select id="model" aria-label="AI model"><option value="nexa">NEXA Research AI</option></select>
+  <select id="mode" aria-label="Answer style"><option value="default">Default</option><option value="concise">Concise</option><option value="detailed">Detailed</option></select>
+  <span class="status" id="status" role="status">Ready · Web search enabled</span>
+</div>
+</main>
+</div>
+<script>
+(() => {
+const $=id=>document.getElementById(id);
+const messages=$('messages'),prompt=$('prompt'),form=$('chat-form'),send=$('send'),status=$('status'),history=$('history');
+let chats=[],activeId=null,busy=false;
+const storeKey='nexa-ai-chats-v1';
+function load(){try{chats=JSON.parse(localStorage.getItem(storeKey)||'[]')}catch{chats=[]}if(!Array.isArray(chats))chats=[];renderHistory();if(chats.length)openChat(chats[0].id);else newChat(false)}
+function save(){try{localStorage.setItem(storeKey,JSON.stringify(chats))}catch{}renderHistory()}
+function active(){return chats.find(c=>c.id===activeId)}
+function renderHistory(){history.replaceChildren();chats.forEach(c=>{const b=document.createElement('button');b.className='history-item'+(c.id===activeId?' active':'');b.textContent=c.title||'New conversation';b.title=b.textContent;b.onclick=()=>openChat(c.id);history.append(b)})}
+function newChat(focus=true){if(busy)return;const c={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:'New conversation',items:[]};chats.unshift(c);activeId=c.id;save();renderMessages();if(focus)prompt.focus()}
+function openChat(id){activeId=id;renderHistory();renderMessages()}
+function renderMessages(){messages.replaceChildren();const c=active();if(!c||!c.items.length){const w=document.createElement('div');w.className='welcome';w.id='welcome';w.innerHTML='<div class="orb">✦</div><h1>What are we <span class="gradient">exploring</span> today?</h1><p>Your AI research companion for engineering, science, technology, and ideas. Ask a question or start with a suggestion.</p><div class="suggestions"><button class="suggestion" data-prompt="Explain recent advances in AI for engineering design."><strong>⌘ &nbsp; Engineering AI</strong><span>Explore new design methods</span></button><button class="suggestion" data-prompt="Find and summarize research on renewable energy storage."><strong>ϟ &nbsp; Energy research</strong><span>Discover papers and findings</span></button><button class="suggestion" data-prompt="Explain how robotics and computer vision work together."><strong>◎ &nbsp; Robotics</strong><span>Understand complex systems</span></button><button class="suggestion" data-prompt="Give me a research plan for a new engineering project."><strong>✧ &nbsp; Research planning</strong><span>Turn an idea into a plan</span></button></div>';messages.append(w);w.querySelectorAll('[data-prompt]').forEach(b=>b.onclick=()=>{prompt.value=b.dataset.prompt;prompt.focus();prompt.style.height='auto';prompt.style.height=Math.min(prompt.scrollHeight,180)+'px'});return}
+c.items.forEach(item=>appendMessage(item.role,item.text,item.papers));messages.scrollTop=messages.scrollHeight}
+function appendMessage(role,text,papers){const row=document.createElement('div');row.className='message '+(role==='user'?'user':'assistant');const av=document.createElement('div');av.className='avatar';av.textContent=role==='user'?'You':'✦';const bubble=document.createElement('div');bubble.className='bubble';bubble.textContent=text;if(papers&&papers.length){const label=document.createElement('div');label.className='paper-count';label.textContent='Research sources · '+papers.length+' records';bubble.append(label);const list=document.createElement('div');list.className='source-list';papers.forEach(p=>{const card=document.createElement('div');card.className='source-card';const a=document.createElement('a');a.href=p.url||'#';a.target='_blank';a.rel='noopener noreferrer';a.textContent=p.title||'Research record';card.append(a);const meta=document.createElement('div');meta.className='source-meta';meta.textContent=[p.year||'Date unavailable',p.source||'Research source',p.doi?'DOI: '+p.doi:''].filter(Boolean).join(' · ');card.append(meta);list.append(card)});bubble.append(list)}row.append(av,bubble);messages.append(row);return row}
+function setStatus(text,error=false){status.textContent=text;status.classList.toggle('error',error)}
+async function submitQuestion(text){if(busy||!text.trim())return;const q=text.trim();let c=active();if(!c){newChat(false);c=active()}if(!c.items.length)c.title=q.length>34?q.slice(0,34)+'…':q;c.items.push({role:'user',text:q});save();renderMessages();prompt.value='';prompt.style.height='auto';busy=true;send.disabled=true;setStatus($('web-access').checked?'Searching research sources…':'Thinking…');const typing=appendMessage('assistant','NEXA is thinking…');typing.querySelector('.bubble').classList.add('typing');messages.scrollTop=messages.scrollHeight;
+let papers=[];
+try{
+ if($('web-access').checked){const rr=await fetch('/api/research?q='+encodeURIComponent(q));const rd=await rr.json();if(rr.ok)papers=Array.isArray(rd.results)?rd.results:[];else setStatus('Research search unavailable; asking AI without papers.',true)}
+ const mode=$('mode').value;const styledQ=mode==='concise'?q+'\nAnswer concisely.':mode==='detailed'?q+'\nGive a detailed, structured explanation.':'';
+ const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:styledQ||q,papers})});
+ const data=await response.json();typing.remove();
+ if(!response.ok){const message=data.error||(response.status===503?'AI is not configured yet.':'AI request failed.');c.items.push({role:'assistant',text:message,papers});appendMessage('assistant',message,papers);setStatus('AI request failed · '+response.status,true)}
+ else{const answer=data.answer||'No answer text was returned.';c.items.push({role:'assistant',text:answer,papers});appendMessage('assistant',answer,papers);setStatus('Response complete'+(papers.length?' · '+papers.length+' research records':'')+'.')}
+ save();messages.scrollTop=messages.scrollHeight;
+ }catch(e){typing.remove();const msg='Could not reach the AI service. Check your connection and try again.';c.items.push({role:'assistant',text:msg,papers});appendMessage('assistant',msg,papers);setStatus('Connection error',true);save()}
+ finally{busy=false;send.disabled=false;prompt.focus()}
+}
+form.addEventListener('submit',e=>{e.preventDefault();submitQuestion(prompt.value)});prompt.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});prompt.addEventListener('input',()=>{prompt.style.height='auto';prompt.style.height=Math.min(prompt.scrollHeight,180)+'px'});
+$('new-chat').addEventListener('click',()=>newChat());$('clear-chat').addEventListener('click',()=>{if(busy)return;if(confirm('Clear all saved NEXA conversations from this browser?')){chats=[];activeId=null;try{localStorage.removeItem(storeKey)}catch{}newChat(false);setStatus('Conversations cleared')}});$('web-access').addEventListener('change',()=>setStatus($('web-access').checked?'Ready · Web search enabled':'Ready · Web search disabled'));
+load();
+})();
+</script>
 </body>
 </html>
