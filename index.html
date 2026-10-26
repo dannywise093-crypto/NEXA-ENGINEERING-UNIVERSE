@@ -97,7 +97,7 @@ let papers=[];
 try{
  if($('web-access').checked){const rr=await fetch('/api/research?q='+encodeURIComponent(q));const rd=await rr.json();if(rr.ok)papers=Array.isArray(rd.results)?rd.results:[];else setStatus('Research search unavailable; asking AI without papers.',true)}
  const mode=$('mode').value;const styledQ=mode==='concise'?q+'\nAnswer concisely.':mode==='detailed'?q+'\nGive a detailed, structured explanation.':'';
- const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:styledQ||q,papers})});
+ const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:styledQ||q,papers,history:c.items.slice(0,-1).map(m=>({role:m.role,text:m.text}))})});
  const data=await response.json();typing.remove();
  if(!response.ok){const message=data.error||(response.status===503?'AI is not configured yet.':'AI request failed.');c.items.push({role:'assistant',text:message,papers});appendMessage('assistant',message,papers);setStatus('AI request failed · '+response.status,true)}
  else{const answer=data.answer||'No answer text was returned.';c.items.push({role:'assistant',text:answer,papers});appendMessage('assistant',answer,papers);setStatus('Response complete'+(papers.length?' · '+papers.length+' research records':'')+'.')}
