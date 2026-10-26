@@ -222,8 +222,28 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const timedOut = failures.some((failure) => failure.message.toLowerCase().includes("abort"));
-  return res.status(timedOut ? 504 : 502).json({
-    error: "OpenAI, Grok, and Claude could not complete the request. Check the provider API keys, model access, and usage limits in Vercel logs, then try again."
+  // No-cost local fallback: keep the chat usable when every configured provider is unavailable.
+  // This is deliberately transparent and does not pretend a live model answered.
+  const q = question.toLowerCase();
+  let offlineAnswer;
+  if (/\b(what can you do|what can you help|help me|capabilities)\b/.test(q)) {
+    offlineAnswer = "NEXA is in offline fallback mode right now because its connected AI providers are unavailable. I can still help with a starting framework: explain a concept, outline an engineering project, draft a coding plan, or structure a research question. Tell me the topic and I’ll provide a basic guided response where possible.";
+  } else if (/\b(project|prototype|build|create|design)\b/.test(q)) {
+    offlineAnswer = "NEXA is in offline fallback mode, so I can’t generate a full live-AI response right now. A useful project starting plan is:\n1. Define the problem and who it helps.\n2. List the required features and constraints (budget, time, materials, power, size).\n3. Sketch two or three possible designs.\n4. Build the smallest safe prototype.\n5. Test it against measurable success criteria and document the results.\n\nShare your specific project and constraints to make this plan more relevant.";
+  } else if (/\b(code|coding|program|javascript|python|html|bug|error)\b/.test(q)) {
+    offlineAnswer = "NEXA is in offline fallback mode, so I can’t run a live coding model at the moment. For a coding issue, start by recording: (1) the exact error message, (2) the relevant code, (3) what you expected, and (4) what actually happened. Then isolate the smallest example that reproduces the problem. Avoid sharing API keys, passwords, or other secrets.";
+  } else if (/\b(research|paper|citation|study|sources)\b/.test(q)) {
+    offlineAnswer = "NEXA is in offline fallback mode, so I can’t reliably synthesize a new research answer right now. To start a sound literature search, turn your topic into a focused question, search scholarly databases, screen titles and abstracts for relevance, verify each paper’s DOI and publication details, and distinguish the authors’ findings from your interpretation. I won’t invent citations or claim to have checked papers I haven’t accessed.";
+  } else if (/\b(engineer|engineering|calculate|equation|design|structure|circuit|mechanical|electrical|civil)\b/.test(q)) {
+    offlineAnswer = "NEXA is in offline fallback mode, so its connected AI models could not answer this yet. For an engineering problem, identify the known values and units, state assumptions, choose the governing principle or equation, solve step by step, and check dimensions and whether the result is physically reasonable. For real structures, electrical installations, medical devices, or other safety-critical systems, get qualified professional review.";
+  } else {
+    offlineAnswer = "NEXA is temporarily in offline fallback mode because the connected AI providers could not complete this request. No live AI answer was generated, and I don’t want to make one up. You can still use the basic chat shortcuts, or try again after provider access is restored. For a useful next step, break your question into the goal, relevant context, constraints, and what a good answer should include.";
+  }
+  return res.status(200).json({
+    answer: offlineAnswer,
+    model: "nexa-offline-fallback",
+    paperCount: 0,
+    offline: true,
+    providerFailures: failures.map(({ provider, status }) => ({ provider, status }))
   });
 }
