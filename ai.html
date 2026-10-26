@@ -211,7 +211,7 @@ if(heading)heading.innerHTML="Welcome to <span class='gradient'>"+labels[tool]+"
 </div></section>
 <section class="workspace-section" id="workspace"><div class="workspace-intro"><div><div class="eyebrow">YOUR INTELLIGENCE LAYER</div><h2>Meet your AI workspace.</h2><p>Ask a question, investigate a topic, or plan your next build. NEXA connects the work in one place.</p></div><div class="workspace-badge"><span></span> READY WHEN YOU ARE</div></div>
 <section class="chat-shell">
-<div class="topline"><div class="topline-title"><span class="mobile-brand">✦ NEXA AI &nbsp;·&nbsp; </span>AI Workspace <span class="workspace-subtitle">/ Ask · Analyze · Create</span></div><div class="online">Assistant ready</div></div>
+<div class="topline"><div class="topline-title"><span class="mobile-brand">✦ NEXA AI &nbsp;·&nbsp; </span><span id="tool-heading">AI Workspace</span> <span class="workspace-subtitle">/ Ask · Analyze · Create</span></div><div class="online">Assistant ready</div></div>
 <div class="messages" id="messages" aria-live="polite"><div class="welcome" id="welcome"><div class="orb">✦</div><h1>What will we <span class="gradient">discover?</span></h1><p>Start with a question. NEXA will help you find the next step.</p><div class="suggestions"><button class="suggestion" data-prompt="Explain recent advances in AI for engineering design."><strong>✦ &nbsp; Understand</strong><span>Break down a complex concept</span></button><button class="suggestion" data-prompt="Find and summarize research on renewable energy storage."><strong>⌕ &nbsp; Investigate</strong><span>Explore research and evidence</span></button><button class="suggestion" data-prompt="Help me plan an engineering project step by step."><strong>◈ &nbsp; Plan a project</strong><span>Turn an idea into a roadmap</span></button><button class="suggestion" data-prompt="Explain how robotics and computer vision work together."><strong>⌘ &nbsp; Explore technology</strong><span>Connect ideas across disciplines</span></button></div></div></div>
 </section>
 <section class="composer-panel"><form id="chat-form"><div class="composer"><textarea id="prompt" rows="1" maxlength="1200" placeholder="Ask NEXA anything about your next big idea…" aria-label="Message NEXA AI" required></textarea><button class="send" id="send" type="submit" aria-label="Send message">➤</button></div><div class="composer-hint">AI-assisted thinking for research, engineering, and discovery. Verify important claims with original sources.</div></form></section>
@@ -223,6 +223,10 @@ if(heading)heading.innerHTML="Welcome to <span class='gradient'>"+labels[tool]+"
 <script>
 (() => {
 const $=id=>document.getElementById(id);
+const toolKey=new URLSearchParams(location.search).get('tool')||'engineering';
+const toolNames={engineering:'Engineering Problem Solver',research:'Research & Discovery AI',project:'Projects & Prototyping AI',code:'Engineering Coding Assistant',design:'Design & Simulation AI',learning:'Learning Pathways Tutor',energy:'Energy & Sustainability AI',mechanical:'Mechanical Engineering AI',electrical:'Electrical & Electronics AI',software:'Software & Computer Engineering AI',robotics:'Robotics & Automation AI',aerospace:'Aerospace & Space AI',materials:'Materials Science AI',civil:'Civil & Structural Engineering AI',chemical:'Chemical Engineering AI',biomedical:'Biomedical Engineering AI',manufacturing:'Manufacturing Engineering AI',industrial:'Industrial & Systems Engineering AI','civil-infrastructure':'Infrastructure & Smart Cities AI','ai-ml':'AI & Machine Learning Engineering AI',cybersecurity:'Cybersecurity Engineering AI',embedded:'Embedded Systems AI',product:'Product & Systems Design AI',science:'Applied Science AI'};
+const selectedToolName=toolNames[toolKey]||toolNames.engineering;
+document.title=selectedToolName+' — NEXA Engineering Universe';
 const messages=$('messages'),prompt=$('prompt'),form=$('chat-form'),send=$('send'),status=$('status'),history=$('history');
 let chats=[],activeId=null,busy=false;
 const storeKey='nexa-ai-chats-v1';
@@ -241,7 +245,7 @@ let papers=[];
 try{
  if($('web-access').checked&&!casualMessage&&!identityQuestion){const rr=await fetch('/api/research?q='+encodeURIComponent(q));const rd=await rr.json();if(rr.ok)papers=Array.isArray(rd.results)?rd.results:[];else setStatus('Research search unavailable; asking AI without papers.',true)}
  const mode=$('mode').value;const styledQ=mode==='concise'?q+'\nAnswer concisely.':mode==='detailed'?q+'\nGive a detailed, structured explanation.':'';
- const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:styledQ||q,papers,history:c.items.slice(0,-1).map(m=>({role:m.role,text:m.text}))})});
+ const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tool:toolKey,question:styledQ||q,papers,history:c.items.slice(0,-1).map(m=>({role:m.role,text:m.text}))})});
  const data=await response.json();typing.remove();
  if(!response.ok){const message=data.error||(response.status===503?'AI is not configured yet.':'AI request failed.');c.items.push({role:'assistant',text:message,papers});appendMessage('assistant',message,papers);setStatus('AI request failed · '+response.status,true)}
  else{const answer=data.answer||'No answer text was returned.';c.items.push({role:'assistant',text:answer,papers});appendMessage('assistant',answer,papers);setStatus('Response complete'+(papers.length?' · '+papers.length+' research records':'')+'.')}
@@ -253,6 +257,8 @@ form.addEventListener('submit',e=>{e.preventDefault();submitQuestion(prompt.valu
 $('new-chat').addEventListener('click',()=>newChat());$('clear-chat').addEventListener('click',()=>{if(busy)return;if(confirm('Clear all saved NEXA conversations from this browser?')){chats=[];activeId=null;try{localStorage.removeItem(storeKey)}catch{}newChat(false);setStatus('Conversations cleared')}});$('web-access').addEventListener('change',()=>setStatus($('web-access').checked?'Ready · Web search enabled':'Ready · Web search disabled'));
 document.querySelectorAll('.rail-action,.topic').forEach(b=>b.addEventListener('click',()=>{prompt.value=b.dataset.prompt||'';prompt.focus();}));
 document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(x=>x.classList.toggle('active',x===b));if(b.dataset.nav==='research'){prompt.value='Find research papers about ';prompt.focus()}else if(b.dataset.nav==='saved'){setStatus('Your conversations are saved in this browser.')}else if(b.dataset.nav==='results'){setStatus('Research results appear below AI responses when Web Access is enabled.')}else if(b.dataset.nav==='settings'){setStatus('Choose Web Access and answer style below the composer.')}else{setStatus('Ready · Web search enabled')}}));
+const heading=$('tool-heading');if(heading)heading.textContent=selectedToolName;
+const promptBox=$('prompt');if(promptBox)promptBox.placeholder='Ask '+selectedToolName+'…';
 load();
 })();
 </script>
