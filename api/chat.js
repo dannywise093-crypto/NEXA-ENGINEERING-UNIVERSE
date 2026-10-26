@@ -89,12 +89,13 @@ export default async function handler(req, res) {
     return res.status(200).json({ answer: quickReplies[normalizedQuestion], model: "nexa-conversation", paperCount: 0 });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  const groqApiKey = process.env.GROQ_API_KEY;
-  if (!apiKey && !groqApiKey) {
+  const openaiApiKey = process.env.OPENAI_API_KEY;
+  const xaiApiKey = process.env.XAI_API_KEY;
+  const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+  if (!openaiApiKey && !xaiApiKey && !anthropicApiKey) {
     return res.status(503).json({
       code: "MISSING_API_KEYS",
-      error: "AI is not configured yet. Add GEMINI_API_KEY or GROQ_API_KEY in Vercel Project Settings → Environment Variables, then redeploy."
+      error: "AI is not configured yet. Add OPENAI_API_KEY, XAI_API_KEY, or ANTHROPIC_API_KEY in Vercel Project Settings → Environment Variables, then redeploy."
     });
   }
 
@@ -122,111 +123,108 @@ export default async function handler(req, res) {
     generationConfig: { temperature: 0.2, maxOutputTokens: 900 }
   };
 
-  const requestGemini = async () => {
+  const makeMessages = () => [
+    { role: "system", content: payload.systemInstruction.parts.map((part) => part.text).join("\n") },
+    { role: "user", content: payload.contents[0].parts.map((part) => part.text).join("\n") }
+  ];
+
+  const callJsonApi = async ({ url, headers, body, parse, provider, model }) => {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000);
+    const timeout = setTimeout(() => controller.abort(), 25000);
     try {
-      const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", {
+      const response = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-        body: JSON.stringify(payload),
+        headers,
+        body: JSON.stringify(body),
         signal: controller.signal
       });
       const json = await response.json().catch(() => ({}));
       if (!response.ok) {
-        const error = new Error(String(json.error?.message || "Gemini request failed").slice(0, 300));
+        const error = new Error(String(json.error?.message || json.error?.type || (provider + " request failed")).slice(0, 300));
         error.status = response.status;
         throw error;
       }
-      const answer = (json.candidates?.[0]?.content?.parts || []).map((part) => part.text || "").join("\n").trim();
-      if (!answer) throw new Error("Gemini returned no text");
-      return { answer, model: "gemini-3.8-flash", paperCount: papers.length };
+      const answer = String(parse(json) || "").trim();
+      if (!answer) throw new Error(provider + " returned no text");
+      return { answer, model, paperCount: papers.length };
     } finally {
       clearTimeout(timeout);
     }
   };
 
-  const requestGroq = async () => {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000);
-    try {
-      const groqPayload = {
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          { role: "system", content: payload.systemInstruction.parts.map((part) => part.text).join("\n") },
-          { role: "user", content: payload.contents[0].parts.map((part) => part.text).join("\n") }
-        ],
-        temperature: 0.2,
-        max_tokens: 900
-      };
-      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: "Bearer " + groqApiKey },
-        body: JSON.stringify(groqPayload),
-        signal: controller.signal
-      });
-      const json = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        const error = new Error(String(json.error?.message || "Groq request failed").slice(0, 300));
-        error.status = response.status;
-        throw error;
-      }
-      const answer = String(json.choices?.[0]?.message?.content || "").trim();
-      if (!answer) throw new Error("Groq returned no text");
-      return { answer, model: "groq-llama-3.3-70b-versatile", paperCount: papers.length };
-    } finally {
-      clearTimeout(timeout);
+  const providers = [
+    openaiApiKey && {
+      name: "OpenAI",
+      model: process.env.OPENAI_MODEL || "gpt-5.5",
+      run: () => callJsonApi({
+        provider: "OpenAI",
+        model: process.env.OPENAI_MODEL || "gpt-5.5",
+        url: "https://api.openai.com/v1/chat/completions",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + openaiApiKey },
+        body: {
+          model: process.env.OPENAI_MODEL || "gpt-5.5",
+          messages: makeMessages(),
+          temperature: 0.2,
+          max_completion_tokens: 900
+        },
+        parse: (json) => json.choices?.[0]?.message?.content
+      })
+    },
+    xaiApiKey && {
+      name: "Grok",
+      model: process.env.XAI_MODEL || "grok-4.7",
+      run: () => callJsonApi({
+        provider: "Grok",
+        model: process.env.XAI_MODEL || "grok-4.7",
+        url: "https://api.x.ai/v1/chat/completions",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + xaiApiKey },
+        body: {
+          model: process.env.XAI_MODEL || "grok-4.7",
+          messages: makeMessages(),
+          temperature: 0.2,
+          max_tokens: 900
+        },
+        parse: (json) => json.choices?.[0]?.message?.content
+      })
+    },
+    anthropicApiKey && {
+      name: "Claude",
+      model: process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5",
+      run: () => callJsonApi({
+        provider: "Claude",
+        model: process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5",
+        url: "https://api.anthropic.com/v1/messages",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": anthropicApiKey,
+          "anthropic-version": "2023-06-01"
+        },
+        body: {
+          model: process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5",
+          system: payload.systemInstruction.parts.map((part) => part.text).join("\n"),
+          messages: [{ role: "user", content: payload.contents[0].parts.map((part) => part.text).join("\n") }],
+          max_tokens: 900,
+          temperature: 0.2
+        },
+        parse: (json) => (json.content || []).filter((part) => part.type === "text").map((part) => part.text || "").join("\n")
+      })
     }
-  };
+  ].filter(Boolean);
 
-  let geminiError = null;
-  if (apiKey) {
+  const failures = [];
+  for (const provider of providers) {
     try {
-      const result = await requestGemini();
+      const result = await provider.run();
       return res.status(200).json(result);
     } catch (error) {
-      geminiError = error;
-      console.error("Gemini provider failed", {
-        status: error?.status || null,
-        message: String(error?.message || error).slice(0, 200)
-      });
+      failures.push({ provider: provider.name, status: error?.status || null, message: String(error?.message || error).slice(0, 180) });
+      console.error(provider.name + " provider failed", failures[failures.length - 1]);
     }
   }
 
-  if (groqApiKey) {
-    try {
-      const result = await requestGroq();
-      return res.status(200).json(result);
-    } catch (error) {
-      console.error("Groq provider failed", {
-        status: error?.status || null,
-        message: String(error?.message || error).slice(0, 200)
-      });
-      if (!apiKey) {
-        return res.status(error?.name === "AbortError" ? 504 : 502).json({
-          error: error?.name === "AbortError"
-            ? "The backup AI service took too long to respond. Please try again shortly."
-            : "The backup AI service is unavailable. Check the GROQ_API_KEY configuration and try again."
-        });
-      }
-    }
-  }
-
-  if (geminiError && !groqApiKey) {
-    const status = geminiError.status;
-    const message = status === 429
-      ? "Gemini's rate limit or quota was reached. Add GROQ_API_KEY for automatic backup, or try again later."
-      : status === 401 || status === 403
-        ? "Gemini rejected the API key or permissions. Check GEMINI_API_KEY; Groq backup is not configured."
-        : status === 404
-          ? "The configured Gemini model was not found. Check the model name in the server configuration."
-          : geminiError.name === "AbortError"
-            ? "Gemini took too long to respond. Please try again shortly."
-            : "Gemini is unavailable and no Groq backup is configured.";
-    return res.status(status === 429 ? 429 : status === 401 || status === 403 ? 502 : geminiError.name === "AbortError" ? 504 : 502).json({ error: message });
-  }
-
-  return res.status(502).json({
-    error: "Both AI providers are currently unavailable. Please try again shortly."
+  const timedOut = failures.some((failure) => failure.message.toLowerCase().includes("abort"));
+  return res.status(timedOut ? 504 : 502).json({
+    error: "OpenAI, Grok, and Claude could not complete the request. Check the provider API keys, model access, and usage limits in Vercel logs, then try again."
   });
+}
 }
