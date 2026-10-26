@@ -223,9 +223,9 @@ if(heading)heading.innerHTML="Welcome to <span class='gradient'>"+labels[tool]+"
 <script>
 (() => {
 const $=id=>document.getElementById(id);
-const toolKey=new URLSearchParams(location.search).get('tool')||'engineering';
+const toolKey='nexa';
 const toolNames={engineering:'Engineering Problem Solver',research:'Research & Discovery AI',project:'Projects & Prototyping AI',code:'Engineering Coding Assistant',design:'Design & Simulation AI',learning:'Learning Pathways Tutor',energy:'Energy & Sustainability AI',mechanical:'Mechanical Engineering AI',electrical:'Electrical & Electronics AI',software:'Software & Computer Engineering AI',robotics:'Robotics & Automation AI',aerospace:'Aerospace & Space AI',materials:'Materials Science AI',civil:'Civil & Structural Engineering AI',chemical:'Chemical Engineering AI',biomedical:'Biomedical Engineering AI',manufacturing:'Manufacturing Engineering AI',industrial:'Industrial & Systems Engineering AI','civil-infrastructure':'Infrastructure & Smart Cities AI','ai-ml':'AI & Machine Learning Engineering AI',cybersecurity:'Cybersecurity Engineering AI',embedded:'Embedded Systems AI',product:'Product & Systems Design AI',science:'Applied Science AI'};
-const selectedToolName=toolNames[toolKey]||toolNames.engineering;
+const selectedToolName='NEXA AI';
 document.title=selectedToolName+' — NEXA Engineering Universe';
 const messages=$('messages'),prompt=$('prompt'),form=$('chat-form'),send=$('send'),status=$('status'),history=$('history');
 let chats=[],activeId=null,busy=false;
