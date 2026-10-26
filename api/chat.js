@@ -41,6 +41,22 @@ export default async function handler(req, res) {
     ? history.map((m) => m.role + ": " + m.text).join("\n")
     : "No previous messages.";
 
+  const normalizedQuestion = question.toLowerCase().replace(/[!.?,]+/g, " ").trim();
+  const quickReplies = {
+    "hello": "Hello! I’m NEXA AI. I can chat with you, explain engineering and science topics, help plan projects, and explore research papers. What would you like to talk about?",
+    "hi": "Hi! I’m NEXA AI. What would you like to explore today—engineering, science, technology, research, or something else?",
+    "hey": "Hey! I’m NEXA AI. What can I help you with today?",
+    "good morning": "Good morning! Welcome to NEXA AI. What would you like to work on today?",
+    "good afternoon": "Good afternoon! What can I help you explore today?",
+    "good evening": "Good evening! What would you like to talk about today?",
+    "what can you do": "I can explain engineering, science, and technology; help brainstorm and plan projects; answer general questions; and find scholarly papers to support research. What shall we start with?",
+    "what can you help me with": "I can help with engineering concepts, science questions, coding ideas, project planning, research summaries, and everyday questions. Tell me what you’re working on, and we’ll take it step by step.",
+    "who are you": "I’m NEXA AI, your assistant for conversation, engineering, science, technology, and research. What would you like help with?"
+  };
+  if (quickReplies[normalizedQuestion]) {
+    return res.status(200).json({ answer: quickReplies[normalizedQuestion], model: "nexa-conversation", paperCount: 0 });
+  }
+
   const papers = Array.isArray(req.body?.papers) ? req.body.papers.slice(0, 10).map((p, index) => ({
     ref: index + 1,
     title: String(p?.title || "").slice(0, 300),
@@ -66,11 +82,19 @@ export default async function handler(req, res) {
   };
 
   try {
-    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-      body: JSON.stringify(payload)
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
+    let response;
+    try {
+      response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
     const json = await response.json().catch(() => ({}));
     if (!response.ok) {
       const providerMessage = String(json.error?.message || "").slice(0, 500);
@@ -93,7 +117,11 @@ export default async function handler(req, res) {
     const answer = (json.candidates?.[0]?.content?.parts || []).map((part) => part.text || "").join("\n").trim();
     if (!answer) return res.status(502).json({ error: "The AI returned no text. Please try again." });
     return res.status(200).json({ answer, model: "gemini-3.8-flash", paperCount: papers.length });
-  } catch {
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      return res.status(504).json({ error: "The AI service took too long to respond. Please try again shortly." });
+    }
+    console.error("Gemini connection error", String(error?.message || error).slice(0, 300));
     return res.status(502).json({ error: "Could not connect to the AI provider. Please try again later." });
   }
 }
