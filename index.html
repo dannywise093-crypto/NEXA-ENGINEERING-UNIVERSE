@@ -22,7 +22,10 @@
 .main-menu a:hover{background:#102b49;color:#70e6e7}
 .main-menu a span{color:#5ce1e6}
 .menu-divider{height:1px;background:#1d3a5c;margin:6px 4px}
-.main-menu a.menu-ai{background:#102d4a;color:#e7fbff;font-weight:750;border:1px solid #245478}
+.menu-group-label{padding:10px 13px 4px;color:#5ce1e6;font-size:10px;font-weight:850;letter-spacing:.18em}
+.main-menu a.menu-tool{padding:10px 13px;font-size:13px}
+.main-menu a.menu-tool span{font-size:12px}
+.main-menu a.menu-tool:hover{background:#102d4a;color:#e7fbff}
 .main-menu a.menu-ai:hover{background:#163c60}
 @media(max-width:800px){.nav{position:sticky}.main-menu{right:14px;top:calc(100% + 5px)}}
 </style>
@@ -49,7 +52,14 @@ document.addEventListener('click',e=>{if(!menu.hidden&&!menu.contains(e.target)&
 <a href="#learning">Learning Pathways <span>→</span></a>
 <a href="#about">About NEXA <span>→</span></a>
 <div class="menu-divider"></div>
-<a class="menu-ai" href="ai.html">✦ &nbsp; Open AI Workspace <span>↗</span></a>
+<div class="menu-group-label">NEXA AI TOOLS</div>
+<a class="menu-tool" href="ai.html?tool=engineering">⚙ &nbsp; Engineering AI <span>↗</span></a>
+<a class="menu-tool" href="ai.html?tool=research">⌕ &nbsp; Research & Paper Finder <span>↗</span></a>
+<a class="menu-tool" href="ai.html?tool=project">◈ &nbsp; Project Planner <span>↗</span></a>
+<a class="menu-tool" href="ai.html?tool=code">⌘ &nbsp; Coding Assistant <span>↗</span></a>
+<a class="menu-tool" href="ai.html?tool=design">✧ &nbsp; Design & Simulation Guide <span>↗</span></a>
+<a class="menu-tool" href="ai.html?tool=learning">▤ &nbsp; Learning Tutor <span>↗</span></a>
+<a class="menu-tool" href="ai.html?tool=energy">☼ &nbsp; Energy & Sustainability AI <span>↗</span></a>
 </nav>
 </header>
 <main id="home">
