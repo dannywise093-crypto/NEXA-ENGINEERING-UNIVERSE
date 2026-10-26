@@ -34,12 +34,35 @@ body{background:radial-gradient(ellipse at 78% 6%,#071e59 0,transparent 43%),rad
 @media(min-width:761px){.sidebar{height:100dvh;min-height:100dvh;top:0}.main{min-height:100dvh}}
 @media(max-width:760px){.app{grid-template-columns:1fr}.sidebar{height:auto;min-height:0;padding:10px 12px;grid-template-columns:1fr auto;border-width:0 0 1px}.brand{font-size:17px;padding:0}.logo{width:36px;height:36px;font-size:22px}.sidebar-nav{display:none}.main{padding-bottom:8px}.chat-shell{margin:8px;min-height:56vh}.topline{padding:0 14px}.composer-panel{margin:0 8px}.controls{padding:10px 12px 0}}
 
+
+/* NEXA Universe visual refresh */
+:root{--bg:#020a1b;--panel:#06152d;--panel2:#091d3d;--line:#12366a;--text:#eef7ff;--muted:#9abce8;--purple:#594cff;--violet:#573dff;--blue:#168cff}
+body{background:radial-gradient(ellipse at 65% 0%,#0b3c8a 0,transparent 38%),radial-gradient(ellipse at 100% 75%,#16105c 0,transparent 32%),#020a1b}
+.app{grid-template-columns:248px minmax(0,1fr);gap:0;padding:0;min-height:100dvh}
+.sidebar{height:100dvh;min-height:100dvh;top:0;border:0;border-right:1px solid #12366a;border-radius:0;padding:24px 18px;background:linear-gradient(180deg,#06162d,#020a19)}
+.brand{font-size:25px;letter-spacing:.04em;padding:0 3px 32px}.brand small{font-size:9px;letter-spacing:.13em;color:#9ccfff}.logo{width:48px;height:48px;border-radius:14px;color:white;font-size:30px;background:linear-gradient(145deg,#4c39ff,#00d6ff);box-shadow:0 0 30px #116cff55}
+.new-chat{border:1px solid #174d9c;background:#08245a;border-radius:13px;color:#e8f5ff}.sidebar-nav{gap:7px;margin:18px 0}.sidebar-nav button{color:#b4d7ff;border-radius:12px;padding:13px}.sidebar-nav button.active,.sidebar-nav button:hover{background:linear-gradient(100deg,#0a3685,#111e64);border-color:#174d9c;box-shadow:none}
+.history-label{color:#5fbaff}.history-item{color:#a7c9ef}.history-item.active,.history-item:hover{background:#0a2450;border-color:#174d9c}
+.profile{border-style:solid;border-color:#16427d;color:#a9c9ef}.profile b{color:#e9f7ff}.clear-btn{border-color:#16427d;color:#c9e6ff}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 264px;grid-template-rows:minmax(440px,1fr) auto auto;gap:12px;padding:0 16px 14px;min-height:100dvh;align-content:stretch}
+.chat-shell{grid-column:1;grid-row:1;min-height:0;margin:0;border-radius:0 0 16px 16px;border-top:0;background:radial-gradient(ellipse at 60% 0%,#0a2c68 0,transparent 52%),linear-gradient(180deg,#04152d,#020b1d);border-color:#10366a}
+.topline{background:#04132a;border-color:#10366a;padding:0 22px}.topline-title{color:#b5d9ff}.online{color:#77f0c1}
+.messages{padding:clamp(18px,2.6vw,34px);gap:22px}.welcome{max-width:720px;width:100%;margin:0 auto;padding:30px 0 18px;text-align:left}.welcome .orb{margin:0 0 18px;width:64px;height:64px;border-radius:50%;background:linear-gradient(140deg,#168dff,#5134ff);box-shadow:0 0 42px #127aff88}.welcome h1{font-size:clamp(28px,3vw,40px);margin-bottom:12px}.welcome p{margin:0 0 24px;max-width:560px;color:#b2cdec}.gradient{background-image:linear-gradient(90deg,#27d8ff,#a99bff)}
+.suggestions{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.suggestion{min-height:74px;border-radius:13px;background:linear-gradient(135deg,#071d3b,#091638);border-color:#16427d;color:#e4f3ff}.suggestion strong{font-size:13px}.suggestion span{color:#9bbde6}.suggestion:hover{background:#0b2a5b;border-color:#248dff}
+.message{max-width:800px}.message .avatar{background:#082b70;color:#6de2ff;border-color:#1756c6}.message.user .bubble{background:linear-gradient(110deg,#245dff,#3625cf);border-color:#4279ff;border-radius:16px;color:white}.bubble{color:#e3f2ff}.source-card{background:#061a36;border-color:#17427a}.source-card a{color:#52dfff}.source-meta{color:#9abce8}
+.composer-panel{grid-column:1;grid-row:2;margin:0;border-radius:16px;border-color:#174d9c;background:#04142b;padding:12px 14px}.composer{border-color:#1756c6;border-radius:32px;background:#061a38;padding-left:20px}.composer:focus-within{border-color:#35a5ff;box-shadow:0 0 0 3px #168cff22}.composer textarea::placeholder{color:#8bb4e6}.send{border-radius:50%;background:linear-gradient(140deg,#168dff,#583bff)}.composer-hint{color:#769cc9}
+.controls{grid-column:1/-1;grid-row:3;padding:0 4px}.controls select{background:#061a36;border-color:#17427a;color:#d5eaff}.status{color:#8fb4df}
+.nexa-rail{grid-column:2;grid-row:1/3;align-self:stretch;display:flex;flex-direction:column;gap:12px;padding:18px 0 0;min-width:0}
+.rail-card{border:1px solid #12396c;border-radius:16px;background:linear-gradient(155deg,#061831,#030d20);padding:14px}.rail-card h3{margin:0 0 10px;font-size:14px;color:#e7f4ff}.rail-action{width:100%;display:flex;align-items:center;gap:10px;text-align:left;border:1px solid #12396c;border-radius:12px;background:#071b38;color:#d9edff;padding:10px;margin-top:7px}.rail-action:hover{border-color:#258bff;background:#0a2855}.rail-icon{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:#0e3d83;color:#6de4ff;flex:0 0 30px}.rail-action b{display:block;font-size:12px;font-weight:650}.rail-action small{display:block;font-size:10px;color:#8fb5e3;margin-top:2px}.topic-list{display:flex;flex-wrap:wrap;gap:7px}.topic{border:1px solid #12396c;border-radius:20px;background:#081d3d;color:#bcdcff;font-size:11px;padding:6px 9px}.rail-banner{min-height:130px;display:flex;flex-direction:column;justify-content:flex-end;background:radial-gradient(ellipse at 85% 15%,#1676cf99,transparent 50%),linear-gradient(145deg,#09234c,#10104a 65%,#07172b);overflow:hidden}.rail-banner strong{font-size:17px;line-height:1.3}.rail-banner small{color:#9dc7f5;margin-top:10px}
+@media(min-width:761px){.sidebar{height:100dvh;min-height:100dvh;top:0}.main{min-height:100dvh}}
+@media(max-width:1050px){.main{grid-template-columns:minmax(0,1fr) 220px;gap:9px;padding:0 10px 10px}.rail-card{padding:10px}.rail-action{padding:8px}.brand{font-size:21px}}
+@media(max-width:760px){.app{grid-template-columns:1fr}.sidebar{height:auto;min-height:0;padding:10px 12px;grid-template-columns:1fr auto;border-width:0 0 1px}.brand{font-size:17px;padding:0}.logo{width:36px;height:36px;font-size:22px}.sidebar-nav{display:none}.main{display:flex;flex-direction:column;gap:8px;padding:0 8px 8px;min-height:calc(100dvh - 65px)}.chat-shell{margin:0;min-height:55vh;border-radius:0 0 14px 14px}.topline{height:48px;flex:0 0 48px;padding:0 12px}.messages{padding:16px 12px}.welcome{padding:12px 0}.welcome .orb{margin-bottom:14px;width:52px;height:52px}.suggestions{grid-template-columns:1fr}.suggestion{min-height:58px}.nexa-rail{display:grid;grid-template-columns:1fr 1fr;padding:0}.nexa-rail .rail-card:first-child{grid-column:1/-1}.rail-banner{display:none}.composer-panel{margin:0}.controls{padding:4px}.status{width:100%;margin-left:0}.sidebar-bottom,.history-label,.history{display:none}}
 </style>
 </head>
 <body>
 <div class="app">
 <aside class="sidebar" aria-label="Conversation sidebar">
-  <div class="brand"><div class="logo">✦</div><div>NEXA AI<small>ENGINEERING UNIVERSE</small></div></div>
+  <div class="brand"><div class="logo">N</div><div>NEXA<small>ENGINEERING UNIVERSE</small></div></div>
   <button class="new-chat" id="new-chat"><span>＋</span> New Conversation</button>
   <nav class="sidebar-nav" aria-label="Main navigation">
     <button class="active" type="button" data-nav="chat">▣ &nbsp; AI Chat</button>
@@ -55,16 +78,27 @@ body{background:radial-gradient(ellipse at 78% 6%,#071e59 0,transparent 43%),rad
 <section class="chat-shell">
   <div class="topline"><div class="topline-title"><span class="mobile-brand">✦ NEXA AI &nbsp;·&nbsp; </span>Ask &nbsp; · &nbsp; Research &nbsp; · &nbsp; Discover &nbsp; · &nbsp; Build a Smarter Future</div><div class="online">Assistant ready</div></div>
   <div class="messages" id="messages" aria-live="polite">
-    <div class="welcome" id="welcome"><div class="orb">✦</div><h1>What are we <span class="gradient">exploring</span> today?</h1><p>Your AI research companion for engineering, science, technology, and ideas. Ask a question or start with a suggestion.</p>
+    <div class="welcome" id="welcome"><div class="orb">✦</div><h1>Hello, I’m NEXA <span class="gradient">✦</span></h1><p>Your AI assistant for engineering, science, research and innovation. How can I help you today?</p>
       <div class="suggestions">
-        <button class="suggestion" data-prompt="Explain recent advances in AI for engineering design."><strong>⌘ &nbsp; Engineering AI</strong><span>Explore new design methods</span></button>
-        <button class="suggestion" data-prompt="Find and summarize research on renewable energy storage."><strong>ϟ &nbsp; Energy research</strong><span>Discover papers and findings</span></button>
-        <button class="suggestion" data-prompt="Explain how robotics and computer vision work together."><strong>◎ &nbsp; Robotics</strong><span>Understand complex systems</span></button>
-        <button class="suggestion" data-prompt="Give me a research plan for a new engineering project."><strong>✧ &nbsp; Research planning</strong><span>Turn an idea into a plan</span></button>
+        <button class="suggestion" data-prompt="Explain recent advances in AI for engineering design."><strong>♧ &nbsp; Explain Concepts</strong><span>Understand complex ideas</span></button>
+        <button class="suggestion" data-prompt="Find and summarize research on renewable energy storage."><strong>▤ &nbsp; Research Papers</strong><span>Discover papers and findings</span></button>
+        <button class="suggestion" data-prompt="Explain how robotics and computer vision work together."><strong>✓ &nbsp; Plan Projects</strong><span>Turn ideas into steps</span></button>
+        <button class="suggestion" data-prompt="Give me a research plan for a new engineering project."><strong>⚙ &nbsp; Solve Problems</strong><span>Explore solutions and methods</span></button>
       </div>
     </div>
   </div>
 </section>
+<aside class="nexa-rail" aria-label="NEXA tools">
+  <section class="rail-card"><h3>Quick Actions</h3>
+    <button class="rail-action" data-prompt="Explain a question I have about engineering or science."><span class="rail-icon">⌕</span><span><b>Ask a Question</b><small>Get instant answers</small></span></button>
+    <button class="rail-action" data-prompt="Find research papers about artificial intelligence in engineering."><span class="rail-icon">▤</span><span><b>Find Research Papers</b><small>Search academic sources</small></span></button>
+    <button class="rail-action" data-prompt="Help me plan an engineering project step by step."><span class="rail-icon">✓</span><span><b>Plan a Project</b><small>Turn ideas into steps</small></span></button>
+    <button class="rail-action" data-prompt="Teach me an interesting engineering concept."><span class="rail-icon">⚙</span><span><b>Learn Engineering</b><small>Explore technical topics</small></span></button>
+    <button class="rail-action" data-prompt="Explore exciting recent discoveries in science."><span class="rail-icon">✧</span><span><b>Explore Science</b><small>Discover new ideas</small></span></button>
+  </section>
+  <section class="rail-card"><h3>Popular Topics</h3><div class="topic-list"><button class="topic" data-prompt="Explain modern engineering.">Engineering</button><button class="topic" data-prompt="Explain AI and technology trends.">AI & Technology</button><button class="topic" data-prompt="Explain renewable energy.">Renewable Energy</button><button class="topic" data-prompt="Explore space and aerospace engineering.">Space & Aerospace</button><button class="topic" data-prompt="Explain materials science.">Materials Science</button><button class="topic" data-prompt="Explain biotechnology.">Biotechnology</button><button class="topic" data-prompt="How can STEM education inspire innovation?">STEM Education</button></div></section>
+  <section class="rail-card rail-banner"><strong>Build. Explore.<br>Innovate.</strong><small>NEXA Engineering Universe</small></section>
+</aside>
 <section class="composer-panel">
 <form id="chat-form"><div class="composer"><textarea id="prompt" rows="1" maxlength="1200" placeholder="Message NEXA AI…" aria-label="Message NEXA AI" required></textarea><button class="send" id="send" type="submit" aria-label="Send message">➤</button></div><div class="composer-hint">NEXA can make mistakes. Verify important research claims with the original sources.</div></form>
 </section>
@@ -107,6 +141,7 @@ try{
 }
 form.addEventListener('submit',e=>{e.preventDefault();submitQuestion(prompt.value)});prompt.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});prompt.addEventListener('input',()=>{prompt.style.height='auto';prompt.style.height=Math.min(prompt.scrollHeight,180)+'px'});
 $('new-chat').addEventListener('click',()=>newChat());$('clear-chat').addEventListener('click',()=>{if(busy)return;if(confirm('Clear all saved NEXA conversations from this browser?')){chats=[];activeId=null;try{localStorage.removeItem(storeKey)}catch{}newChat(false);setStatus('Conversations cleared')}});$('web-access').addEventListener('change',()=>setStatus($('web-access').checked?'Ready · Web search enabled':'Ready · Web search disabled'));
+document.querySelectorAll('.rail-action,.topic').forEach(b=>b.addEventListener('click',()=>{prompt.value=b.dataset.prompt||'';prompt.focus();}));
 document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(x=>x.classList.toggle('active',x===b));if(b.dataset.nav==='research'){prompt.value='Find research papers about ';prompt.focus()}else if(b.dataset.nav==='saved'){setStatus('Your conversations are saved in this browser.')}else if(b.dataset.nav==='results'){setStatus('Research results appear below AI responses when Web Access is enabled.')}else if(b.dataset.nav==='settings'){setStatus('Choose Web Access and answer style below the composer.')}else{setStatus('Ready · Web search enabled')}}));
 load();
 })();
