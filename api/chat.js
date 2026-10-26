@@ -73,11 +73,21 @@ export default async function handler(req, res) {
     });
     const json = await response.json().catch(() => ({}));
     if (!response.ok) {
+      const providerMessage = String(json.error?.message || "").slice(0, 500);
+      console.error("Gemini API request failed", {
+        status: response.status,
+        statusText: response.statusText,
+        providerMessage
+      });
       const message = response.status === 429
-        ? "The free AI quota or rate limit was reached. Wait and try again later."
-        : response.status === 403 || response.status === 400
-          ? "The AI provider rejected this request. Check that the Gemini API key is valid and the model is available for your project."
-          : "The AI provider is temporarily unavailable. Please try again later.";
+        ? "The AI service rate limit or quota was reached. Please wait and try again."
+        : response.status === 401 || response.status === 403
+          ? "The AI service rejected the API key or access permissions. Check the GEMINI_API_KEY value in Vercel."
+          : response.status === 400
+            ? "The AI service rejected the request. Check the model and request settings."
+            : response.status === 404
+              ? "The configured AI model was not found. Check the model name in the server configuration."
+              : "The AI service is temporarily unavailable. Please try again later.";
       return res.status(response.status === 429 ? 429 : 502).json({ error: message });
     }
     const answer = (json.candidates?.[0]?.content?.parts || []).map((part) => part.text || "").join("\n").trim();
