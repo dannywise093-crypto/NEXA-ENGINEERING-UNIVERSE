@@ -215,7 +215,7 @@ if(heading)heading.innerHTML="Welcome to <span class='gradient'>"+labels[tool]+"
 <div class="messages" id="messages" aria-live="polite"><div class="welcome" id="welcome"><div class="orb">✦</div><h1>What will we <span class="gradient">discover?</span></h1><p>Start with a question. NEXA will help you find the next step.</p><div class="suggestions"><button class="suggestion" data-prompt="Explain recent advances in AI for engineering design."><strong>✦ &nbsp; Understand</strong><span>Break down a complex concept</span></button><button class="suggestion" data-prompt="Find and summarize research on renewable energy storage."><strong>⌕ &nbsp; Investigate</strong><span>Explore research and evidence</span></button><button class="suggestion" data-prompt="Help me plan an engineering project step by step."><strong>◈ &nbsp; Plan a project</strong><span>Turn an idea into a roadmap</span></button><button class="suggestion" data-prompt="Explain how robotics and computer vision work together."><strong>⌘ &nbsp; Explore technology</strong><span>Connect ideas across disciplines</span></button></div></div></div>
 </section>
 <section class="composer-panel"><form id="chat-form"><div class="composer"><textarea id="prompt" rows="1" maxlength="1200" placeholder="Ask NEXA anything about your next big idea…" aria-label="Message NEXA AI" required></textarea><button class="send" id="send" type="submit" aria-label="Send message">➤</button></div><div class="composer-hint">AI-assisted thinking for research, engineering, and discovery. Verify important claims with original sources.</div></form></section>
-<div class="controls"><label class="toggle-wrap"><span class="switch"><input type="checkbox" id="web-access" checked><span class="slider"></span></span>Web research <span title="Searches public Crossref and OpenAlex paper metadata before answering">ⓘ</span></label><select id="model" aria-label="AI model"><option value="nexa">NEXA Intelligence</option></select><select id="mode" aria-label="Answer style"><option value="default">Balanced</option><option value="concise">Concise</option><option value="detailed">Detailed</option></select><span class="status" id="status" role="status">Ready · Web search enabled</span></div>
+<div class="controls"><label class="toggle-wrap"><span class="switch"><input type="checkbox" id="web-access" checked><span class="slider"></span></span>Web research <span title="Searches public Crossref and OpenAlex paper metadata before answering">ⓘ</span></label><select id="model" aria-label="AI model"><option value="nexa">NEXA Intelligence (cloud)</option><option value="local">Local AI (runs in this browser)</option></select><select id="mode" aria-label="Answer style"><option value="default">Balanced</option><option value="concise">Concise</option><option value="detailed">Detailed</option></select><span class="status" id="status" role="status">Ready · Web search enabled</span></div>
 </section>
 <footer class="site-footer"><span>© NEXA ENGINEERING UNIVERSE</span><span>Think deeper. Build better. Explore further.</span></footer>
 </main>
@@ -240,9 +240,40 @@ function renderMessages(){messages.replaceChildren();const c=active();if(!c||!c.
 c.items.forEach(item=>appendMessage(item.role,item.text,item.papers));messages.scrollTop=messages.scrollHeight}
 function appendMessage(role,text,papers){const row=document.createElement('div');row.className='message '+(role==='user'?'user':'assistant');const av=document.createElement('div');av.className='avatar';av.textContent=role==='user'?'You':'✦';const bubble=document.createElement('div');bubble.className='bubble';bubble.textContent=text;if(papers&&papers.length){const label=document.createElement('div');label.className='paper-count';label.textContent='Research sources · '+papers.length+' records';bubble.append(label);const list=document.createElement('div');list.className='source-list';papers.forEach(p=>{const card=document.createElement('div');card.className='source-card';const a=document.createElement('a');a.href=p.url||'#';a.target='_blank';a.rel='noopener noreferrer';a.textContent=p.title||'Research record';card.append(a);const meta=document.createElement('div');meta.className='source-meta';meta.textContent=[p.year||'Date unavailable',p.source||'Research source',p.doi?'DOI: '+p.doi:''].filter(Boolean).join(' · ');card.append(meta);list.append(card)});bubble.append(list)}row.append(av,bubble);messages.append(row);return row}
 function setStatus(text,error=false){status.textContent=text;status.classList.toggle('error',error)}
+let localEnginePromise=null;
+const localModelId='Llama-3.2-1B-Instruct-q4f32_1-MLC';
+async function askLocalModel(question, priorItems){
+ if(!('gpu' in navigator))throw new Error('This browser does not support WebGPU. Try an up-to-date desktop Chrome or Edge browser, or switch back to NEXA Intelligence (cloud).');
+ if(!localEnginePromise){
+  localEnginePromise=(async()=>{
+   setStatus('Loading local AI library…');
+   const webllm=await import('https://esm.run/@mlc-ai/web-llm');
+   return await webllm.CreateMLCEngine(localModelId,{initProgressCallback:(p)=>{
+    const percent=typeof p.progress==='number'?Math.round(p.progress*100):null;
+    setStatus(percent===null?'Downloading local AI model…':('Downloading local AI model… '+percent+'%'));
+   }});
+  })().catch(error=>{localEnginePromise=null;throw error});
+ }
+ const engine=await localEnginePromise;
+ const context=(priorItems||[]).slice(-6).map(m=>({role:m.role==='assistant'?'assistant':'user',content:String(m.text||'').slice(0,1000)}));
+ const result=await engine.chat.completions.create({messages:[
+  {role:'system',content:'You are NEXA AI, a helpful assistant for engineering, science, coding, research planning, and learning. Be clear and practical. State assumptions and uncertainty. Do not invent citations. For safety-critical engineering, recommend qualified professional review.'},
+  ...context,
+  {role:'user',content:question}
+ ],temperature:0.3,max_tokens:700});
+ const answer=result.choices&&result.choices[0]&&result.choices[0].message&&result.choices[0].message.content;
+ if(!answer)throw new Error('The local model returned no answer. Try again.');
+ return answer;
+}
 async function submitQuestion(text){if(busy||!text.trim())return;const q=text.trim();let c=active();if(!c){newChat(false);c=active()}if(!c.items.length)c.title=q.length>34?q.slice(0,34)+'…':q;c.items.push({role:'user',text:q});save();renderMessages();prompt.value='';prompt.style.height='auto';const casualMessage=/^(hello|hi|hey|good morning|good afternoon|good evening|how are you|what can you do|what can you help me with|who are you)[!.?, ]*$/i.test(q.trim());const identityQuestion=/(founder|owner|ceo|chief executive officer|who founded|who owns)/i.test(q)&&/(nexa|engineering universe)/i.test(q);busy=true;send.disabled=true;setStatus($('web-access').checked&&!casualMessage&&!identityQuestion?'Searching research sources…':'Thinking…');const typing=appendMessage('assistant','NEXA is thinking…');typing.querySelector('.bubble').classList.add('typing');messages.scrollTop=messages.scrollHeight;
 let papers=[];
 try{
+ if($('model').value==='local'){
+  setStatus('Preparing local AI… first use downloads the model to this browser.');
+  const answer=await askLocalModel(q,c.items.slice(0,-1));
+  typing.remove();c.items.push({role:'assistant',text:answer,papers:[]});appendMessage('assistant',answer,[]);
+  setStatus('Local AI response complete · runs on your device');save();messages.scrollTop=messages.scrollHeight;return;
+ }
  if($('web-access').checked&&!casualMessage&&!identityQuestion){try{const rr=await fetch('/api/research?q='+encodeURIComponent(q));const rd=await rr.json();if(rr.ok)papers=Array.isArray(rd.results)?rd.results:[];else setStatus('Research search unavailable; asking AI without papers.',true)}catch(researchError){setStatus('Research search unavailable; asking AI without papers.',true)}}
  const mode=$('mode').value;const styledQ=mode==='concise'?q+'\nAnswer concisely.':mode==='detailed'?q+'\nGive a detailed, structured explanation.':'';
  const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tool:toolKey,question:styledQ||q,papers,history:c.items.slice(0,-1).map(m=>({role:m.role,text:m.text}))})});
