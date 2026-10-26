@@ -138,6 +138,30 @@ html{scroll-behavior:smooth;scroll-padding-top:85px}
 @media(max-width:390px){.explore-grid{grid-template-columns:1fr}}
 
 </style>
+<script>
+(()=> {
+const presets={
+engineering:"Act as NEXA Engineering AI. Help me understand an engineering problem, explain the principles, assumptions, calculations, and trade-offs clearly.",
+research:"Act as NEXA Research Assistant. Help me find and assess scholarly research, suggest search terms, compare evidence, and identify limitations. Never invent paper citations.",
+project:"Act as NEXA Project Planner. Help me turn an idea into a project brief with goals, requirements, milestones, materials or software needs, testing, and risks.",
+code:"Act as NEXA Coding Assistant. Help me design, write, explain, and debug code. Ask for missing requirements and explain your solution.",
+design:"Act as NEXA Design and Simulation Guide. Help me define a system, compare design options, identify constraints, and plan safe simulations or tests.",
+learning:"Act as NEXA Learning Tutor. Teach concepts step by step, adapt to my level, give examples, and check my understanding.",
+energy:"Act as NEXA Energy and Sustainability Assistant. Help analyze energy systems, efficiency, renewables, environmental trade-offs, and evidence-based options."
+};
+const labels={engineering:"Engineering AI",research:"Research & Paper Finder",project:"Project Planner",code:"Coding Assistant",design:"Design & Simulation Guide",learning:"Learning Tutor",energy:"Energy & Sustainability AI"};
+const tool=new URLSearchParams(location.search).get("tool");
+if(!tool||!presets[tool])return;
+document.addEventListener("DOMContentLoaded",()=>{
+const prompt=document.getElementById("prompt");
+const title=document.querySelector(".topline-title");
+if(prompt){prompt.value=presets[tool];prompt.placeholder="Tell "+labels[tool]+" what you want to work on…";prompt.style.height="auto";prompt.style.height=Math.min(prompt.scrollHeight,180)+"px";}
+if(title)title.textContent="NEXA · "+labels[tool];
+const heading=document.querySelector(".welcome h1");
+if(heading)heading.innerHTML="Welcome to <span class='gradient'>"+labels[tool]+"</span>";
+});
+})();
+</script>
 </head>
 <body>
 <div class="app">
