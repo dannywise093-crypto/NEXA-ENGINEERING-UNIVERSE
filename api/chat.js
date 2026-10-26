@@ -10,14 +10,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed." });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    return res.status(503).json({
-      code: "MISSING_API_KEY",
-      error: "AI is not configured yet. Add GEMINI_API_KEY in Vercel Project Settings → Environment Variables, then redeploy."
-    });
-  }
-
   const forwarded = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim();
   const ip = forwarded || "unknown";
   const now = Date.now();
@@ -64,6 +56,14 @@ export default async function handler(req, res) {
   };
   if (quickReplies[normalizedQuestion]) {
     return res.status(200).json({ answer: quickReplies[normalizedQuestion], model: "nexa-conversation", paperCount: 0 });
+  }
+
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return res.status(503).json({
+      code: "MISSING_API_KEY",
+      error: "AI is not configured yet. Add GEMINI_API_KEY in Vercel Project Settings → Environment Variables, then redeploy."
+    });
   }
 
   const papers = Array.isArray(req.body?.papers) ? req.body.papers.slice(0, 10).map((p, index) => ({
