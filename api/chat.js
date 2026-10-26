@@ -90,10 +90,11 @@ export default async function handler(req, res) {
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
+  const groqApiKey = process.env.GROQ_API_KEY;
+  if (!apiKey && !groqApiKey) {
     return res.status(503).json({
-      code: "MISSING_API_KEY",
-      error: "AI is not configured yet. Add GEMINI_API_KEY in Vercel Project Settings → Environment Variables, then redeploy."
+      code: "MISSING_API_KEYS",
+      error: "AI is not configured yet. Add GEMINI_API_KEY or GROQ_API_KEY in Vercel Project Settings → Environment Variables, then redeploy."
     });
   }
 
@@ -121,47 +122,111 @@ export default async function handler(req, res) {
     generationConfig: { temperature: 0.2, maxOutputTokens: 900 }
   };
 
-  try {
+  const requestGemini = async () => {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000);
-    let response;
     try {
-      response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", {
+      const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
         body: JSON.stringify(payload),
         signal: controller.signal
       });
+      const json = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const error = new Error(String(json.error?.message || "Gemini request failed").slice(0, 300));
+        error.status = response.status;
+        throw error;
+      }
+      const answer = (json.candidates?.[0]?.content?.parts || []).map((part) => part.text || "").join("\n").trim();
+      if (!answer) throw new Error("Gemini returned no text");
+      return { answer, model: "gemini-3.8-flash", paperCount: papers.length };
     } finally {
       clearTimeout(timeout);
     }
-    const json = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      const providerMessage = String(json.error?.message || "").slice(0, 500);
-      console.error("Gemini API request failed", {
-        status: response.status,
-        statusText: response.statusText,
-        providerMessage
+  };
+
+  const requestGroq = async () => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
+    try {
+      const groqPayload = {
+        model: "llama-3.3-70b-versatile",
+        messages: [
+          { role: "system", content: payload.systemInstruction.parts.map((part) => part.text).join("\n") },
+          { role: "user", content: payload.contents[0].parts.map((part) => part.text).join("\n") }
+        ],
+        temperature: 0.2,
+        max_tokens: 900
+      };
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + groqApiKey },
+        body: JSON.stringify(groqPayload),
+        signal: controller.signal
       });
-      const message = response.status === 429
-        ? "The AI service rate limit or quota was reached. Please wait and try again."
-        : response.status === 401 || response.status === 403
-          ? "The AI service rejected the API key or access permissions. Check the GEMINI_API_KEY value in Vercel."
-          : response.status === 400
-            ? "The AI service rejected the request. Check the model and request settings."
-            : response.status === 404
-              ? "The configured AI model was not found. Check the model name in the server configuration."
-              : "The AI service is temporarily unavailable. Please try again later.";
-      return res.status(response.status === 429 ? 429 : 502).json({ error: message });
+      const json = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const error = new Error(String(json.error?.message || "Groq request failed").slice(0, 300));
+        error.status = response.status;
+        throw error;
+      }
+      const answer = String(json.choices?.[0]?.message?.content || "").trim();
+      if (!answer) throw new Error("Groq returned no text");
+      return { answer, model: "groq-llama-3.3-70b-versatile", paperCount: papers.length };
+    } finally {
+      clearTimeout(timeout);
     }
-    const answer = (json.candidates?.[0]?.content?.parts || []).map((part) => part.text || "").join("\n").trim();
-    if (!answer) return res.status(502).json({ error: "The AI returned no text. Please try again." });
-    return res.status(200).json({ answer, model: "gemini-3.8-flash", paperCount: papers.length });
-  } catch (error) {
-    if (error?.name === "AbortError") {
-      return res.status(504).json({ error: "The AI service took too long to respond. Please try again shortly." });
+  };
+
+  let geminiError = null;
+  if (apiKey) {
+    try {
+      const result = await requestGemini();
+      return res.status(200).json(result);
+    } catch (error) {
+      geminiError = error;
+      console.error("Gemini provider failed", {
+        status: error?.status || null,
+        message: String(error?.message || error).slice(0, 200)
+      });
     }
-    console.error("Gemini connection error", String(error?.message || error).slice(0, 300));
-    return res.status(502).json({ error: "Could not connect to the AI provider. Please try again later." });
   }
+
+  if (groqApiKey) {
+    try {
+      const result = await requestGroq();
+      return res.status(200).json(result);
+    } catch (error) {
+      console.error("Groq provider failed", {
+        status: error?.status || null,
+        message: String(error?.message || error).slice(0, 200)
+      });
+      if (!apiKey) {
+        return res.status(error?.name === "AbortError" ? 504 : 502).json({
+          error: error?.name === "AbortError"
+            ? "The backup AI service took too long to respond. Please try again shortly."
+            : "The backup AI service is unavailable. Check the GROQ_API_KEY configuration and try again."
+        });
+      }
+    }
+  }
+
+  if (geminiError && !groqApiKey) {
+    const status = geminiError.status;
+    const message = status === 429
+      ? "Gemini's rate limit or quota was reached. Add GROQ_API_KEY for automatic backup, or try again later."
+      : status === 401 || status === 403
+        ? "Gemini rejected the API key or permissions. Check GEMINI_API_KEY; Groq backup is not configured."
+        : status === 404
+          ? "The configured Gemini model was not found. Check the model name in the server configuration."
+          : geminiError.name === "AbortError"
+            ? "Gemini took too long to respond. Please try again shortly."
+            : "Gemini is unavailable and no Groq backup is configured.";
+    return res.status(status === 429 ? 429 : status === 401 || status === 403 ? 502 : geminiError.name === "AbortError" ? 504 : 502).json({ error: message });
+  }
+
+  return res.status(502).json({
+    error: "Both AI providers are currently unavailable. Please try again shortly."
+  });
 }
