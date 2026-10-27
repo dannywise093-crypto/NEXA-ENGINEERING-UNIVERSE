@@ -154,6 +154,19 @@ module.exports = async function handler(req, res) {
   };
 
   const providers = [
+    openRouterApiKey && {
+      name: "OpenRouter",
+      model: process.env.OPENROUTER_MODEL || "openrouter/free",
+      run: () => callJsonApi({
+        provider: "OpenRouter",
+        model: process.env.OPENROUTER_MODEL || "openrouter/free",
+        url: "https://openrouter.ai/api/v1/chat/completions",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + openRouterApiKey,
+          "HTTP-Referer": "https://nexa-engineering-universe.vercel.app/",
+          "X-Title": "NEXA Engineering Universe"
+        },
     openaiApiKey && {
       name: "OpenAI",
       model: process.env.OPENAI_MODEL || "gpt-5.5",
@@ -211,19 +224,7 @@ module.exports = async function handler(req, res) {
       })
     }
 
-    openRouterApiKey && {
-      name: "OpenRouter",
-      model: process.env.OPENROUTER_MODEL || "openrouter/free",
-      run: () => callJsonApi({
-        provider: "OpenRouter",
-        model: process.env.OPENROUTER_MODEL || "openrouter/free",
-        url: "https://openrouter.ai/api/v1/chat/completions",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + openRouterApiKey,
-          "HTTP-Referer": "https://nexa-engineering-universe.vercel.app/",
-          "X-Title": "NEXA Engineering Universe"
-        },
+
         body: {
           model: process.env.OPENROUTER_MODEL || "openrouter/free",
           messages: makeMessages(),
