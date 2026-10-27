@@ -92,7 +92,8 @@ module.exports = async function handler(req, res) {
   const openaiApiKey = process.env.OPENAI_API_KEY;
   const xaiApiKey = process.env.XAI_API_KEY;
   const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
-  if (!openaiApiKey && !xaiApiKey && !anthropicApiKey) {
+  const openRouterApiKey = process.env.OPENROUTER_API_KEY;
+  if (!openaiApiKey && !xaiApiKey && !anthropicApiKey && !openRouterApiKey) {
     return res.status(503).json({
       code: "MISSING_API_KEYS",
       error: "AI is not configured yet. Add OPENAI_API_KEY, XAI_API_KEY, or ANTHROPIC_API_KEY in Vercel Project Settings → Environment Variables, then redeploy."
@@ -209,6 +210,29 @@ module.exports = async function handler(req, res) {
         parse: (json) => (json.content || []).filter((part) => part.type === "text").map((part) => part.text || "").join("\n")
       })
     }
+
+    openRouterApiKey && {
+      name: "OpenRouter",
+      model: process.env.OPENROUTER_MODEL || "openrouter/free",
+      run: () => callJsonApi({
+        provider: "OpenRouter",
+        model: process.env.OPENROUTER_MODEL || "openrouter/free",
+        url: "https://openrouter.ai/api/v1/chat/completions",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + openRouterApiKey,
+          "HTTP-Referer": "https://nexa-engineering-universe.vercel.app/",
+          "X-Title": "NEXA Engineering Universe"
+        },
+        body: {
+          model: process.env.OPENROUTER_MODEL || "openrouter/free",
+          messages: makeMessages(),
+          temperature: 0.2,
+          max_tokens: 900
+        },
+        parse: (json) => json.choices?.[0]?.message?.content
+      })
+    },
   ].filter(Boolean);
 
   const failures = [];
